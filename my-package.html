@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Package - V-Pet Care</title>
+    <style>
+        :root {
+            --primary-blue: #1a73e8;
+            --secondary-blue: #4285f4;
+            --light-blue: #e8f0fe;
+            --primary-red: #ea4335;
+            --secondary-red: #fce8e6;
+            --dark-blue: #0d47a1;
+            --dark-red: #c62828;
+            --dark-text: #202124;
+            --light-text: #5f6368;
+            --border-color: #dadce0;
+            --white: #ffffff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-red));
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--white);
+        }
+        
+        .logo span {
+            color: var(--secondary-red);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--white);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--light-blue);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--white);
+            color: var(--primary-red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+            border: 2px solid var(--primary-red);
+        }
+        
+        .user-details {
+            color: var(--white);
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            padding: 40px 0;
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .page-title {
+            font-size: 22px;
+            margin-bottom: 30px;
+            color: var(--dark-text);
+            border-bottom: 2px solid var(--primary-red);
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+        
+        .package-card {
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            max-width: 800px;
+            margin: 0 auto;
+            border: 1px solid var(--primary-blue);
+        }
+        
+        .package-header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-red));
+            color: white;
+            padding: 25px 30px;
+        }
+        
+        .package-name {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .package-price {
+            font-size: 32px;
+            font-weight: 700;
+            margin: 15px 0;
+        }
+        
+        .price-period {
+            font-size: 16px;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+        
+        .package-description {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-top: 10px;
+        }
+        
+        .package-details {
+            padding: 30px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            color: var(--primary-red);
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary-blue);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+        }
+        
+        .feature-icon {
+            width: 24px;
+            height: 24px;
+            background-color: var(--light-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            color: var(--primary-blue);
+            border: 1px solid var(--primary-red);
+        }
+        
+        .feature-name {
+            font-size: 16px;
+        }
+        
+        .access-provided {
+            background-color: var(--light-blue);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border-left: 4px solid var(--primary-red);
+        }
+        
+        .access-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--primary-blue);
+        }
+        
+        .access-list {
+            list-style-type: none;
+        }
+        
+        .access-list li {
+            padding: 5px 0;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .access-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--primary-red);
+            font-weight: bold;
+        }
+        
+        .package-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--primary-blue);
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 16px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-red));
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--dark-blue), var(--dark-red));
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary-blue);
+            color: var(--primary-blue);
+            margin-right: 15px;
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--light-blue);
+            border-color: var(--primary-red);
+            color: var(--primary-red);
+        }
+        
+        /* No Package Styles */
+        .no-package-container {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px 40px;
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--primary-blue);
+        }
+        
+        .no-package-icon {
+            font-size: 80px;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+        }
+        
+        .no-package-title {
+            font-size: 22px;
+            color: var(--dark-text);
+            margin-bottom: 15px;
+        }
+        
+        .no-package-description {
+            font-size: 16px;
+            color: var(--light-text);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .view-packages-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-red));
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 18px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .view-packages-btn:hover {
+            background: linear-gradient(135deg, var(--dark-blue), var(--dark-red));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Footer Styles */
+        footer {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-red));
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 60px;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-section h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--white);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: var(--light-blue);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--secondary-red);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            margin-top: 20px;
+            color: var(--light-blue);
+            font-size: 14px;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                padding: 15px 0;
+            }
+            
+            .nav-links {
+                margin: 20px 0;
+            }
+            
+            .nav-links li {
+                margin: 0 15px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .package-actions {
+                flex-direction: column;
+            }
+            
+            .btn-outline {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .no-package-container {
+                padding: 40px 20px;
+            }
+            
+            .no-package-icon {
+                font-size: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="./img/logo.jpg" alt="" style="border-radius: 50%;" />
+                </div>
+                <ul class="nav-links">
+                    <li><a href="./index.html">Dashboard</a></li>
+                    <li><a href="my-package.html" class="active">My Package</a></li>
+                    <li><a href="./all-packages.html">All packages</a></li>
+                </ul>
+                <div class="user-info">
+                    <div class="user-avatar">M</div>
+                    <div class="user-details">
+                        <div class="user-name">Malik</div>
+                        <div class="user-email">m@gmail.com</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Change this variable to toggle between subscribed and not subscribed states -->
+            <!-- Set to true if user has a package, false if not -->
+            <script>
+                // Change this value to false to see the "no package" state
+                const userHasPackage = false;
+            </script>
+            
+            <!-- Package Display (shown when user has a package) -->
+            <div id="package-container" style="display: none;">
+                <h1 class="page-title">My Package</h1>
+                
+                <div class="package-card">
+                    <div class="package-header">
+                        <h2 class="package-name">Premium Plan</h2>
+                        <div class="package-price">$49.99<span class="price-period">/month</span></div>
+                        <p class="package-description">Complete access to all V-Pet Care features for optimal pet health management</p>
+                    </div>
+                    
+                    <div class="package-details">
+                        <h3 class="section-title">Package Details</h3>
+                        <p>Your current subscription provides comprehensive access to our platform's features designed to help you manage your pet's health and wellness.</p>
+                        
+                        <h3 class="section-title">Features Access</h3>
+                        <div class="features-grid">
+                            <div class="feature-item">
+                                <div class="feature-icon">✓</div>
+                                <span class="feature-name">V-Guide Features</span>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">✓</div>
+                                <span class="feature-name">V-Blog Features</span>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">✓</div>
+                                <span class="feature-name">Monthly V-Blog Features</span>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">✓</div>
+                                <span class="feature-name">Monthly V-Nation Features</span>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">✓</div>
+                                <span class="feature-name">Monthly Published Profile Reels</span>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">✓</div>
+                                <span class="feature-name">V-Author Profile Blog</span>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">✓</div>
+                                <span class="feature-name">Monthly Published Profile Social Posts</span>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">✓</div>
+                                <span class="feature-name">Monthly V-Author Profile Notion</span>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">✓</div>
+                                <span class="feature-name">Monthly Published Posts</span>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">✓</div>
+                                <span class="feature-name">Monthly Published Profile Highlights</span>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">✓</div>
+                                <span class="feature-name">V-Tube Features</span>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">✓</div>
+                                <span class="feature-name">V-Jobs Features</span>
+                            </div>
+                        </div>
+                        
+                        <h3 class="section-title">General Features Access</h3>
+                        <div class="access-provided">
+                            <div class="access-title">Your package includes:</div>
+                            <ul class="access-list">
+                                <li>Selling Products & Services</li>
+                                <li>Access to orders</li>
+                                <li>Access to support</li>
+                                <li>Buying Products & Services</li>
+                                <li>Access to analytics</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="package-actions">
+                            <button class="btn btn-primary" onclick="window.location.href='./all-packages.html'">Change package</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- No Package Display (shown when user doesn't have a package) -->
+            <div id="no-package-container" style="display: none;">
+                <div class="no-package-container">
+                    <div class="no-package-icon">📦</div>
+                    <h2 class="no-package-title">You have not subscribed any package</h2>
+                    <p class="no-package-description">
+                        You don't have an active subscription package yet. Choose from our variety of packages 
+                        to unlock premium features and get the most out of our platform.
+                    </p>
+                    <a href="./all-packages.html" class="view-packages-btn">View All Packages</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>V-Verse</h3>
+                    <p>Comprehensive pet health and wellness platform designed to help pet owners provide the best care for their furry friends.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="./index.html">Home</a></li>
+                        <li><a href="./all-packages.html">Pricing</a></li>
+                        <li><a href="./contact-us.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="./contact-us.html">Help Center</a></li>
+                        <li><a href="./privacy-policy.html">Privacy Policy</a></li>
+                        <li><a href="./terms-conditions.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <ul class="footer-links">
+                        <li>Email: support@vpetcare.com</li>
+                        <li>Phone: +1 (555) 123-4567</li>
+                        <li>Address: 123 Pet Street, Animal City</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2025 V-Verse All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Check if user has a package and display appropriate content
+        document.addEventListener('DOMContentLoaded', function() {
+            const packageContainer = document.getElementById('package-container');
+            const noPackageContainer = document.getElementById('no-package-container');
+            
+            // In a real application, you would check the user's subscription status from your backend
+            // For demonstration, we're using the userHasPackage variable
+            if (userHasPackage) {
+                packageContainer.style.display = 'block';
+                noPackageContainer.style.display = 'none';
+            } else {
+                packageContainer.style.display = 'none';
+                noPackageContainer.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
