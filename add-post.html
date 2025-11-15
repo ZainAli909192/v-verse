@@ -1,0 +1,4270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Post - V-Verse</title>
+    <style>
+        :root {
+            --primary-blue: #1a73e8;
+            --secondary-blue: #4285f4;
+            --light-blue: #e8f0fe;
+            --primary-red: #ea4335;
+            --secondary-red: #fce8e6;
+            --dark-blue: #0d47a1;
+            --dark-red: #c62828;
+            --dark-text: #202124;
+            --light-text: #5f6368;
+            --border-color: #dadce0;
+            --white: #ffffff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-red));
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--white);
+        }
+        
+        .logo span {
+            color: var(--secondary-red);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--white);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--light-blue);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--white);
+            color: var(--primary-red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+            border: 2px solid var(--primary-red);
+        }
+        
+        .user-details {
+            color: var(--white);
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            padding: 40px 0;
+            min-height: 70vh;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            margin-bottom: 30px;
+            color: var(--dark-text);
+            border-bottom: 2px solid var(--primary-red);
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+        
+        /* Form Container */
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            border: 1px solid var(--primary-blue);
+        }
+        
+        /* Progress Steps */
+        .progress-steps {
+            display: flex;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-red));
+            padding: 20px 30px;
+            color: white;
+        }
+        
+        .step {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+        
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .step.active .step-number {
+            background-color: var(--white);
+            color: var(--primary-blue);
+        }
+        
+        .step-label {
+            font-weight: 500;
+        }
+        
+        .step-divider {
+            flex: 0 0 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        /* Form Steps */
+        .form-step {
+            padding: 30px;
+            display: none;
+        }
+        
+        .form-step.active {
+            display: block;
+        }
+        
+        .step-title {
+            font-size: 24px;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        /* Category Selection */
+        .categories-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .category-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+
+        .category-card:hover {
+            background-color: var(--light-blue);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-blue);
+        }
+
+        .category-card.selected {
+            background: linear-gradient(135deg, var(--light-blue), var(--secondary-red));
+            border-color: var(--primary-red);
+        }
+
+        .category-card i {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: var(--primary-blue);
+        }
+
+        .category-card.selected i {
+            color: var(--primary-red);
+        }
+
+        .category-card span {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark-text);
+        }
+        
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group input[type="date"],
+        .form-group input[type="datetime-local"],
+        .form-group input[type="file"],
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 2px var(--light-blue);
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .price {
+            width: 100%;
+        }
+        
+        .box {
+            margin-bottom: 0;
+        }
+        
+        /* Form Actions */
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 16px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-red));
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--dark-blue), var(--dark-red));
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid var(--primary-blue);
+            color: var(--primary-blue);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--light-blue);
+            border-color: var(--primary-red);
+            color: var(--primary-red);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        /* Form-specific styles */
+        #photoForm, #videoForm, #eventForm, #productForm, #booksForm, #jobsForm, #articleForm, #webinarForm {
+            display: none;
+        }
+        
+        #webinarForm small {
+            display: block;
+            color: var(--light-text);
+            margin-top: 0.25rem;
+            font-size: 12px;
+        }
+        
+        #webinarForm label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .post-content video, .post-content img {
+            width: 99%;
+            max-height: 400px;
+            margin-top: 1rem;
+        }
+        
+        /* Footer Styles */
+        footer {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-red));
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 60px;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-section h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--white);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: var(--light-blue);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--secondary-red);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            margin-top: 20px;
+            color: var(--light-blue);
+            font-size: 14px;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                padding: 15px 0;
+            }
+            
+            .nav-links {
+                margin: 20px 0;
+            }
+            
+            .nav-links li {
+                margin: 0 15px;
+            }
+            
+            .categories-container {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+
+        /* vguide  */
+        /* Rich Text Editor Styles */
+.editor-toolbar {
+    display: flex;
+    gap: 2px;
+    padding: 12px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 2px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+    border-radius: 8px 8px 0 0;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.editor-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: var(--white);
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    color: var(--medium-gray);
+    font-size: 14px;
+    position: relative;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.editor-btn:hover {
+    background: var(--primary-blue);
+    color: var(--white);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(26, 98, 210, 0.3);
+}
+
+.editor-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.editor-btn.active {
+    background: var(--primary-blue);
+    color: var(--white);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Toolbar separator */
+.editor-toolbar .editor-btn:nth-child(4)::after {
+    content: "";
+    position: absolute;
+    right: -3px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 20px;
+    width: 1px;
+    background: #ddd;
+}
+
+.editor-toolbar .editor-btn:nth-child(6)::after {
+    content: "";
+    position: absolute;
+    right: -3px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 20px;
+    width: 1px;
+    background: #ddd;
+}
+
+/* Editor Content Area */
+.editor-content {
+    border: 2px solid #e0e0e0;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    min-height: 300px;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--dark-gray);
+    background: var(--white);
+    outline: none;
+    transition: all 0.3s ease;
+    overflow-y: auto;
+    max-height: 600px;
+}
+
+.editor-content:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(26, 98, 210, 0.1);
+}
+
+/* Placeholder styling */
+.editor-content:empty:before {
+    content: "Start writing your detailed content here...";
+    color: #999;
+    font-style: italic;
+}
+
+.editor-content:focus:empty:before {
+    content: "Start writing your detailed content here...";
+    color: #ccc;
+}
+
+/* Rich text content styling */
+.editor-content h1,
+.editor-content h2,
+.editor-content h3,
+.editor-content h4,
+.editor-content h5,
+.editor-content h6 {
+    color: var(--primary-blue);
+    margin: 20px 0 10px 0;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.editor-content h1 {
+    font-size: 24px;
+    border-bottom: 2px solid var(--primary-red);
+    padding-bottom: 8px;
+}
+
+.editor-content h2 {
+    font-size: 20px;
+    border-bottom: 1px solid var(--light-blue);
+    padding-bottom: 6px;
+}
+
+.editor-content h3 {
+    font-size: 18px;
+}
+
+.editor-content p {
+    margin-bottom: 16px;
+}
+
+.editor-content ul,
+.editor-content ol {
+    margin: 16px 0;
+    padding-left: 24px;
+}
+
+.editor-content li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.editor-content ul li {
+    list-style-type: disc;
+}
+
+.editor-content ol li {
+    list-style-type: decimal;
+}
+
+.editor-content blockquote {
+    border-left: 4px solid var(--primary-blue);
+    background: var(--light-blue);
+    padding: 16px 20px;
+    margin: 20px 0;
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+}
+
+.editor-content code {
+    background: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    color: var(--primary-red);
+}
+
+.editor-content pre {
+    background: #2d3748;
+    color: #e2e8f0;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 20px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.editor-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: var(--white);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.editor-content table th {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+    color: var(--white);
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.editor-content table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 14px;
+}
+
+.editor-content table tr:last-child td {
+    border-bottom: none;
+}
+
+.editor-content table tr:nth-child(even) {
+    background: #f8f9fa;
+}
+
+.editor-content table tr:hover {
+    background: var(--light-blue);
+}
+
+/* Image styling */
+.editor-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 16px 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.editor-content img:hover {
+    transform: scale(1.02);
+}
+
+/* Link styling */
+.editor-content a {
+    color: var(--primary-blue);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.editor-content a:hover {
+    color: var(--secondary-blue);
+    border-bottom-color: var(--secondary-blue);
+}
+
+/* Selection styling */
+.editor-content ::selection {
+    background: rgba(26, 98, 210, 0.2);
+    color: inherit;
+}
+
+.editor-content ::-moz-selection {
+    background: rgba(26, 98, 210, 0.2);
+    color: inherit;
+}
+
+/* Scrollbar styling */
+.editor-content::-webkit-scrollbar {
+    width: 8px;
+}
+input[type="checkbox"]{
+    cursor: pointer;
+}
+.editor-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.editor-content::-webkit-scrollbar-thumb {
+    background: var(--primary-blue);
+    border-radius: 4px;
+}
+
+.editor-content::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-blue);
+}
+
+/* Form hint styling */
+.form-hint {
+    font-size: 12px;
+    color: var(--medium-gray);
+    margin-top: 8px;
+    padding: 8px 12px;
+    background: var(--light-blue);
+    border-radius: 4px;
+    border-left: 3px solid var(--primary-blue);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .editor-toolbar {
+        padding: 8px;
+        gap: 1px;
+    }
+    
+    .editor-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 12px;
+    }
+    
+    .editor-content {
+        padding: 16px;
+        min-height: 250px;
+        font-size: 16px; /* Better for mobile */
+    }
+    
+    .editor-content h1 {
+        font-size: 22px;
+    }
+    
+    .editor-content h2 {
+        font-size: 18px;
+    }
+    
+    .editor-content h3 {
+        font-size: 16px;
+    }
+}
+
+/* Animation for editor focus */
+@keyframes editorFocus {
+    0% {
+        box-shadow: 0 0 0 0 rgba(26, 98, 210, 0.1);
+    }
+    50% {
+        box-shadow: 0 0 0 4px rgba(26, 98, 210, 0.1);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(26, 98, 210, 0.1);
+    }
+}
+
+.editor-content:focus {
+    animation: editorFocus 0.5s ease;
+}
+
+/* Tooltip for toolbar buttons */
+.editor-btn {
+    position: relative;
+}
+
+.editor-btn::after {
+    content: attr(title);
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.editor-btn:hover::after {
+    opacity: 1;
+    visibility: visible;
+    bottom: -35px;
+}
+
+.editor-btn::before {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #333;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.editor-btn:hover::before {
+    opacity: 1;
+    visibility: visible;
+    bottom: -15px;
+}
+/* File Upload Area Styles */
+.file-upload-area {
+    border: 2px dashed #d1d5db;
+    border-radius: 12px;
+    padding: 40px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.file-upload-area:hover {
+    border-color: var(--primary-blue);
+    background: linear-gradient(135deg, #f0f7ff 0%, #e8f1ff 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(26, 98, 210, 0.15);
+}
+
+.file-upload-area.drag-over {
+    border-color: var(--primary-blue);
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    border-style: solid;
+    transform: scale(1.02);
+}
+
+.file-upload-area.has-file {
+    border-color: var(--success-green);
+    background: linear-gradient(135deg, #f0fff4 0%, #e6fffa 100%);
+}
+
+.file-upload-area i {
+    font-size: 48px;
+    color: var(--primary-blue);
+    margin-bottom: 16px;
+    transition: all 0.3s ease;
+}
+
+.file-upload-area:hover i {
+    color: var(--secondary-blue);
+    transform: scale(1.1);
+}
+
+.file-upload-area.drag-over i {
+    color: var(--primary-blue);
+    animation: bounce 0.6s ease infinite alternate;
+}
+
+.file-upload-text {
+    color: var(--medium-gray);
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.file-upload-area:hover .file-upload-text {
+    color: var(--primary-blue);
+}
+
+.file-upload-area.drag-over .file-upload-text {
+    color: var(--primary-blue);
+    font-weight: 600;
+}
+
+/* File Upload Button */
+.file-upload-btn {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+    color: var(--white);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(26, 98, 210, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.file-upload-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(26, 98, 210, 0.4);
+    background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
+}
+
+.file-upload-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(26, 98, 210, 0.3);
+}
+
+.file-upload-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.file-upload-btn:hover::before {
+    left: 100%;
+}
+
+/* File Preview Container */
+.file-preview-container {
+    margin-top: 20px;
+    display: none;
+}
+
+.file-preview-container.show {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+.file-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.file-preview-item {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.file-preview-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+.file-preview-image {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    background: #f8f9fa;
+}
+
+.file-preview-info {
+    padding: 8px;
+    background: white;
+}
+
+.file-preview-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--dark-gray);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 4px;
+}
+
+.file-preview-size {
+    font-size: 10px;
+    color: var(--medium-gray);
+}
+
+.file-remove-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 24px;
+    height: 24px;
+    background: var(--primary-red);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    transition: all 0.3s ease;
+    opacity: 0;
+}
+
+.file-preview-item:hover .file-remove-btn {
+    opacity: 1;
+}
+
+.file-remove-btn:hover {
+    background: var(--secondary-red);
+    transform: scale(1.1);
+}
+
+/* Multiple Files Indicator */
+.multiple-files-indicator {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--primary-blue);
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    animation: pulse 2s infinite;
+}
+
+/* Animations */
+@keyframes bounce {
+    0% {
+        transform: translateY(0) scale(1);
+    }
+    100% {
+        transform: translateY(-5px) scale(1.05);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(26, 98, 210, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(26, 98, 210, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(26, 98, 210, 0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .file-upload-area {
+        padding: 30px 15px;
+    }
+    
+    .file-upload-area i {
+        font-size: 36px;
+    }
+    
+    .file-upload-text {
+        font-size: 14px;
+    }
+    
+    .file-upload-btn {
+        padding: 10px 20px;
+        font-size: 13px;
+    }
+    
+    .file-preview-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 8px;
+    }
+    
+    .file-preview-image {
+        height: 80px;
+    }
+}
+.section-title{
+    /* color: red; */
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-red) 100%); 
+    /* background: linear-gradient(135deg, blue 0%, red 100%);  */
+    -webkit-background-clip: text !important;              
+    -webkit-textfill-color:transparent !important;
+    color: transparent !important;    
+}
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="./img/logo.jpg" alt="V-Verse Logo" style="border-radius: 50%; height: 40px; width: 40px; object-fit: cover;" />
+                </div>
+                <ul class="nav-links">
+                    <li><a href="./index.html">Dashboard</a></li>
+                    <li><a href="./my-package.html">My Package</a></li>
+                    <li><a href="./all-packages.html">All packages</a></li>
+                    <li><a href="./add-post.html" class="active">Add Post</a></li>
+                </ul>
+                <div class="user-info">
+                    <div class="user-avatar">M</div>
+                    <div class="user-details">
+                        <div class="user-name">Malik</div>
+                        <div class="user-email">m@gmail.com</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <h1 class="page-title">Create New Post</h1>
+            
+            <div class="form-container">
+                <!-- Progress Steps -->
+                <div class="progress-steps">
+                    <div class="step active">
+                        <div class="step-number">1</div>
+                        <div class="step-label">Select Category</div>
+                    </div>
+                    <div class="step-divider">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-label">Create Content</div>
+                    </div>
+                </div>
+                
+                <!-- Step 1: Category Selection -->
+                <div class="form-step active" id="step1">
+                    <h2 class="step-title">Choose a Category</h2>
+                    <p style="text-align: center; margin-bottom: 20px; color: var(--light-text);">
+                        Select the category that best fits your content
+                    </p>
+                    
+                    <div class="categories-container">
+                        <div class="category-card" data-category="v_guide">
+                            <i class="fas fa-book-open"></i>
+                            <span>V-Guide</span>
+                        </div>
+                        <div class="category-card" data-category="v_blog">
+                            <i class="fas fa-blog"></i>
+                            <span>V-Blog</span>
+                        </div>
+                        <div class="category-card" data-category="v_nation">
+                            <i class="fas fa-users"></i>
+                            <span>V-Nation</span>
+                        </div>
+                        <div class="category-card" data-category="v_tube">
+                            <i class="fas fa-video"></i>
+                            <span>V-Tube</span>
+                        </div>
+                        <div class="category-card" data-category="v_jobs">
+                            <i class="fas fa-briefcase"></i>
+                            <span>V-Jobs</span>
+                        </div>
+                        <div class="category-card" data-category="v_lance">
+                            <i class="fas fa-handshake"></i>
+                            <span>V-Lance</span>
+                        </div>
+                        <div class="category-card" data-category="v_college">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>V-College</span>
+                        </div>
+                        <div class="category-card" data-category="v_market">
+                            <i class="fas fa-store"></i>
+                            <span>V-Market</span>
+                        </div>
+                        <div class="category-card" data-category="v_events">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>V-Events</span>
+                        </div>
+                        <div class="category-card" data-category="v_webinars">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <span>V-Webinars</span>
+                        </div>
+                        <div class="category-card" data-category="v_experts">
+                            <i class="fas fa-user-tie"></i>
+                            <span>V-Experts</span>
+                        </div>
+                        <div class="category-card" data-category="v_buzz">
+                            <i class="fas fa-newspaper"></i>
+                            <span>V-Buzz</span>
+                        </div>
+                        <div class="category-card" data-category="v_cast">
+                            <i class="fas fa-podcast"></i>
+                            <span>V-Cast</span>
+                        </div>
+                        <div class="category-card" data-category="v_books">
+                            <i class="fas fa-book"></i>
+                            <span>V-Books</span>
+                        </div>
+                        <div class="category-card" data-category="v_support">
+                            <i class="fas fa-question-circle"></i>
+                            <span>V-Support</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button class="btn btn-secondary" onclick="window.location.href='./index.html'">Cancel</button>
+                        <button class="btn btn-primary" id="nextStep1" disabled>Next</button>
+                    </div>
+                </div>
+                
+                <!-- Step 2: Content Creation -->
+                <div class="form-step" id="step2">
+                    <h2 class="step-title" id="step2Title">Create Your Post</h2>
+                    
+                    <!-- All forms (initially hidden) -->
+                    <form id="photoForm" enctype="multipart/form-data">
+                        <input type="hidden" name="category" class="category-input" value="general">
+                        <input type="hidden" name="user_id" value="1">
+                        <div class="form-group">
+                            <textarea name="content" id="postContent" placeholder="What do you want to share with the veterinary community?" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="postImage">Add Image (optional)</label>
+                            <input type="file" id="postImage" name="image" accept="image/*">
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="backStep2">Back</button>
+                            <button type="submit" class="btn btn-primary">Post</button>
+                        </div>
+                    </form>
+
+                    <form id="videoForm" enctype="multipart/form-data">
+                        <input type="hidden" name="category" class="category-input" value="general">
+                        <input type="hidden" name="user_id" value="1">
+                        <div class="form-group">
+                            <input type="text" name="title" placeholder="Title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="postVideo">Add video</label>
+                            <input type="file" id="postVideo" name="video_path" accept="video/*">
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="backStep2">Back</button>
+                            <button type="submit" class="btn btn-primary">Post</button>
+                        </div>
+                    </form>
+                   
+                    <form id="eventForm" enctype="multipart/form-data">
+                        <input type="hidden" name="category" class="category-input" value="general">
+                        <input type="hidden" name="user_id" value="1">
+                        <div class="form-group">
+                            <label for="eventTitle">Title of event</label>
+                            <input type="text" name="title" placeholder="Title of event" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Date</label>
+                            <input type="date" id="date" name="date">
+                        </div>
+                        <div class="form-group">
+                            <label for="location">Location</label>
+                            <input type="text" id="location" name="location">
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="backStep2">Back</button>
+                            <button type="submit" class="btn btn-primary">Post</button>
+                        </div>
+                    </form>
+
+
+                    <!-- <form id="booksForm" enctype="multipart/form-data">
+                        <input type="hidden" name="category" class="category-input" value="general">
+                        <input type="hidden" name="user_id" value="1">
+                        <div class="form-group">
+                            <label for="bookName">Book name:</label>
+                            <input type="text" name="book_name" placeholder="Book name" required>
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="bookPrice">Price:</label>
+                                <input type="number" id="bookPrice" class="price" name="price">
+                            </div>
+                            <div class="form-group">
+                                <label for="bookQuantity">Quantity</label>
+                                <input type="number" id="bookQuantity" class="price" name="quantity">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="bookDescription">Description</label>
+                            <textarea id="bookDescription" name="description" required placeholder="Description" rows="4"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="book_image">Book image</label>
+                            <input type="file" id="book_image" name="book_image" accept="image/*">
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="backStep2">Back</button>
+                            <button type="submit" class="btn btn-primary">Post</button>
+                        </div>
+                    </form> -->
+
+                    <form id="jobsForm" enctype="multipart/form-data">
+                        <input type="hidden" name="category" class="category-input" value="job">
+                        <input type="hidden" name="user_id" value="1">
+                        <div class="form-group">
+                            <label for="jobTitle">Job title:</label>
+                            <input type="text" name="job_title" placeholder="Job title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="jobDescription">Description</label>
+                            <textarea id="jobDescription" name="description" required placeholder="Description" rows="4"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="job_image">Image (optional)</label>
+                            <input type="file" id="job_image" name="job_image" accept="image/*">
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="backStep2">Back</button>
+                            <button type="submit" class="btn btn-primary">Post</button>
+                        </div>
+                    </form>
+
+                    <form id="articleForm" enctype="multipart/form-data">
+                        <input type="hidden" name="category" class="category-input" value="general">
+                        <input type="hidden" name="user_id" value="1">
+                        <div class="form-group">
+                            <label for="articleTitle">Title of article</label>
+                            <input type="text" name="title" id="articleTitle">
+                        </div>
+                        <div class="form-group">
+                            <textarea name="content" id="articleContent" name="description" placeholder="What do you want to share with the veterinary community?" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="articleImage">Add Image (optional)</label>
+                            <input type="file" id="articleImage" name="image_path" accept="image/*">
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="backStep2">Back</button>
+                            <button type="submit" class="btn btn-primary">Post</button>
+                        </div>
+                    </form>
+                    
+                    <form id="webinarForm" enctype="multipart/form-data">
+                        <input type="hidden" name="category" class="category-input" value="webinar">
+                        <input type="hidden" name="user_id" value="1">
+                        
+                        <div class="form-group">
+                            <label for="webinarTitle">Webinar Title *</label>
+                            <input type="text" id="webinarTitle" name="title" placeholder="Enter webinar title" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="webinarDescription">Detailed Description *</label>
+                            <textarea id="webinarDescription" name="description" placeholder="Provide a detailed description of your webinar" rows="4" required></textarea>
+                        </div>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="webinarDate">Date & Time *</label>
+                                <input type="datetime-local" id="webinarDate" name="date_time" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="webinarDuration">Duration (minutes) *</label>
+                                <input type="number" id="webinarDuration" name="duration" min="15" value="60" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="webinarType">Webinar Type *</label>
+                            <select id="webinarType" name="type" required>
+                                <option value="live">Live Webinar</option>
+                                <option value="recorded">Recorded (Evergreen) Webinar</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="webinarCategory">Category *</label>
+                            <select id="webinarCategory" name="category" required>
+                                <option value="veterinary_medicine">Veterinary Medicine</option>
+                                <option value="surgery">Surgery</option>
+                                <option value="practice_management">Practice Management</option>
+                                <option value="animal_health">Animal Health</option>
+                                <option value="research">Research</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="webinarPrice">Price (USD) *</label>
+                            <input type="number" id="webinarPrice" name="price" min="0" step="0.01" value="0.00" required>
+                            <small>Enter 0 for free webinars</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="webinarThumbnail">Thumbnail Image *</label>
+                            <input type="file" id="webinarThumbnail" name="thumbnail" accept="image/*" required>
+                            <small>Recommended size: 1200x630 pixels</small>
+                        </div>
+                        
+                        <div class="form-group" id="videoUploadGroup" style="display: none;">
+                            <label for="webinarVideo">Upload Webinar Video (MP4) *</label>
+                            <input type="file" id="webinarVideo" name="video" accept="video/mp4">
+                        </div>
+                        
+                     
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="backStep2">Back</button>
+                            <button type="submit" class="btn btn-primary">Schedule Webinar</button>
+                        </div>
+                    </form>
+
+                <form id="vExpertsForm" enctype="multipart/form-data">
+                    <input type="hidden" name="category" class="category-input" value="v_experts">
+                    <input type="hidden" name="user_id" value="1">
+                    
+                    <!-- Consultation Type -->
+                    <div class="form-group">
+                        <label for="consultationType">Consultation Type *</label>
+                        <select id="consultationType" name="consultation_type" required>
+                            <option value="">Select Consultation Type</option>
+                            <option value="diagnostic">Diagnostic Consultation</option>
+                            <option value="surgical">Surgical Planning</option>
+                            <option value="treatment">Treatment Strategy</option>
+                            <option value="second_opinion">Second Opinion</option>
+                            <option value="emergency">Emergency Case Review</option>
+                            <option value="practice_management">Practice Management</option>
+                            <option value="research">Research Collaboration</option>
+                            <option value="educational">Educational Session</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Consultation Details -->
+                    <div class="form-group">
+                        <label for="consultationTitle">Consultation Title *</label>
+                        <input type="text" id="consultationTitle" name="title" placeholder="e.g., Canine Cardiology Case Review" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="consultationDescription">Case Description & Details *</label>
+                        <textarea id="consultationDescription" name="description" 
+                                placeholder="Provide detailed information about the case, including patient history, symptoms, diagnostic findings, and specific questions for the expert..." 
+                                rows="6" required></textarea>
+                    </div>
+                    
+                    <!-- Specialization & Expertise -->
+                    <div class="form-group">
+                        <label for="specializationArea">Specialization Area *</label>
+                        <select id="specializationArea" name="specialization" required>
+                            <option value="">Select Area of Expertise</option>
+                            <option value="cardiology">Cardiology</option>
+                            <option value="dentistry">Dentistry</option>
+                            <option value="dermatology">Dermatology</option>
+                            <option value="emergency_critical_care">Emergency & Critical Care</option>
+                            <option value="internal_medicine">Internal Medicine</option>
+                            <option value="neurology">Neurology</option>
+                            <option value="oncology">Oncology</option>
+                            <option value="ophthalmology">Ophthalmology</option>
+                            <option value="orthopedics">Orthopedics</option>
+                            <option value="surgery">Surgery</option>
+                            <option value="exotic_animals">Exotic Animals</option>
+                            <option value="large_animals">Large Animals</option>
+                            <option value="practice_management">Practice Management</option>
+                            <option value="veterinary_education">Veterinary Education</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Consultation Format -->
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="consultationFormat">Consultation Format *</label>
+                            <select id="consultationFormat" name="format" required>
+                                <option value="video_call">Video Conference</option>
+                                <option value="audio_call">Audio Call</option>
+                                <option value="message_only">Message Exchange</option>
+                                <option value="file_review">File Review Only</option>
+                                <option value="hybrid">Hybrid (Video + File Review)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="consultationDuration">Estimated Duration (minutes) *</label>
+                            <select id="consultationDuration" name="duration" required>
+                                <option value="15">15 minutes</option>
+                                <option value="30">30 minutes</option>
+                                <option value="45">45 minutes</option>
+                                <option value="60" selected>60 minutes</option>
+                                <option value="90">90 minutes</option>
+                                <option value="120">120 minutes</option>
+                                <option value="custom">Custom Duration</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Pricing -->
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="consultationPrice">Consultation Fee (USD) *</label>
+                            <input type="number" id="consultationPrice" name="price" min="0" step="0.01" placeholder="0.00" required>
+                            <small>Set your consultation fee. Enter 0 for free consultations.</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="currency">Currency *</label>
+                            <select id="currency" name="currency" required>
+                                <option value="USD" selected>USD ($)</option>
+                                <option value="EUR">EUR (€)</option>
+                                <option value="GBP">GBP (£)</option>
+                                <option value="CAD">CAD (C$)</option>
+                                <option value="AUD">AUD (A$)</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Availability -->
+                    <div class="form-group">
+                        <label for="availabilitySchedule">Availability Schedule *</label>
+                        <select id="availabilitySchedule" name="availability" required>
+                            <option value="flexible">Flexible - Schedule as needed</option>
+                            <option value="business_hours">Business Hours Only</option>
+                            <option value="evenings">Evenings Only</option>
+                            <option value="weekends">Weekends Only</option>
+                            <option value="emergency">24/7 Emergency Availability</option>
+                            <option value="custom">Custom Schedule</option>
+                        </select>
+                    </div>
+                    
+                    <!-- File Uploads -->
+                    <div class="form-group">
+                        <label for="caseFiles">Case Files & Documents (Optional)</label>
+                        <input type="file" id="caseFiles" name="case_files" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.dicom" multiple>
+                        <small>Upload relevant files: lab results, X-rays, medical records, etc. (Max 10 files, 10MB each)</small>
+                    </div>
+                    
+                    <!-- Languages -->
+                    <div class="form-group">
+                        <label for="languages">Languages Spoken *</label>
+                        <select id="languages" name="languages" multiple required style="height: 100px;">
+                            <option value="english" selected>English</option>
+                            <option value="spanish">Spanish</option>
+                            <option value="french">French</option>
+                            <option value="german">German</option>
+                            <option value="arabic">Arabic</option>
+                            <option value="chinese">Chinese</option>
+                            <option value="hindi">Hindi</option>
+                            <option value="portuguese">Portuguese</option>
+                            <option value="russian">Russian</option>
+                            <option value="japanese">Japanese</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <small>Hold Ctrl/Cmd to select multiple languages</small>
+                    </div>
+                    
+                    <!-- Certifications & Qualifications -->
+                    <div class="form-group">
+                        <label for="qualifications">Qualifications & Certifications *</label>
+                        <textarea id="qualifications" name="qualifications" 
+                                placeholder="List your relevant qualifications, certifications, and years of experience..." 
+                                rows="4" required></textarea>
+                    </div>
+                    
+                    <!-- Consultation Features -->
+                    <div class="form-group">
+                        <label>Consultation Features *</label>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 10px;">
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" name="features[]" value="video_conferencing" checked>
+                                Video Conferencing
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" name="features[]" value="file_sharing" checked>
+                                File Sharing
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" name="features[]" value="screen_sharing" checked>
+                                Screen Sharing
+                            </label>
+                         
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" name="features[]" value="follow_up_support">
+                                Follow-up Support
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" name="features[]" value="written_report">
+                                Written Report
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Response Time -->
+                    <div class="form-group">
+                        <label for="responseTime">Expected Response Time *</label>
+                        <select id="responseTime" name="response_time" required>
+                            <option value="immediate">Immediate (Live Consultation)</option>
+                            <option value="1_hour">Within 1 Hour</option>
+                            <option value="4_hours">Within 4 Hours</option>
+                            <option value="24_hours" selected>Within 24 Hours</option>
+                            <option value="48_hours">Within 48 Hours</option>
+                            <option value="custom">Custom Response Time</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Target Audience -->
+                    <div class="form-group">
+                        <label for="targetAudience">Target Audience *</label>
+                        <select id="targetAudience" name="target_audience" multiple required style="height: 120px;">
+                            <option value="veterinarians">Veterinarians</option>
+                            <option value="veterinary_technicians">Veterinary Technicians</option>
+                            <option value="veterinary_students">Veterinary Students</option>
+                            <option value="practice_owners">Practice Owners</option>
+                            <option value="researchers">Researchers</option>
+                            <option value="pet_owners">Pet Owners</option>
+                            <option value="animal_shelters">Animal Shelters</option>
+                            <option value="pharmaceutical_companies">Pharmaceutical Companies</option>
+                            <option value="government_agencies">Government Agencies</option>
+                            <option value="other_professionals">Other Professionals</option>
+                        </select>
+                        <small>Hold Ctrl/Cmd to select multiple audience types</small>
+                    </div>
+                    
+                    <!-- Consultation Tags -->
+                    <div class="form-group">
+                        <label for="consultationTags">Consultation Tags</label>
+                        <input type="text" id="consultationTags" name="tags" 
+                            placeholder="e.g., cardiology, emergency, surgery, feline, canine, exotic">
+                        <small>Add relevant tags to help clients find your consultation service</small>
+                    </div>
+                    
+                    <!-- Terms & Conditions -->
+                    <div class="form-group">
+                        <label style="display: flex; align-items: flex-start; gap: 10px;">
+                            <input type="checkbox" name="terms_accepted" required style="margin-top: 3px;">
+                            <span>
+                                I agree to the <a href="#" style="color: var(--primary-blue);">V-Experts Terms of Service</a> and confirm that I have the necessary qualifications and licenses to provide veterinary consultation services. *
+                            </span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="backStep2">Back</button>
+                        <button type="submit" class="btn btn-primary">Publish Consultation</button>
+                    </div>
+                </form>
+                
+                <!-- Add this form to your existing forms in add-post.html -->
+                <form id="vCollegeForm" enctype="multipart/form-data">
+                    <input type="hidden" name="category" class="category-input" value="v_college">
+                    <input type="hidden" name="user_id" value="1">
+                    
+                    <!-- Course Type -->
+                    <div class="form-group">
+                        <label for="courseType">Course Type *</label>
+                        <select id="courseType" name="course_type" required>
+                            <option value="">Select Course Type</option>
+                            <option value="single_course">Single Course</option>
+                            <option value="diploma_program">Diploma Program</option>
+                            <option value="certification">Professional Certification</option>
+                            <option value="workshop">Workshop</option>
+                            <option value="masterclass">Masterclass</option>
+                            <option value="micro_learning">Micro-learning Module</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Course Basic Information -->
+                    <div class="form-group">
+                        <label for="courseTitle">Course Title *</label>
+                        <input type="text" id="courseTitle" name="title" placeholder="e.g., Advanced Canine Surgery Techniques" required>
+                    </div>
+                
+                    
+                    <div class="form-group">
+                        <label for="courseDescription">Course Description *</label>
+                        <textarea id="courseDescription" name="description" 
+                                placeholder="Provide a comprehensive description of your course, including learning objectives, target audience, and key benefits..." 
+                                rows="6" required></textarea>
+                    </div>
+                    
+                    <!-- Category & Specialization -->
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="courseCategory">Primary Category *</label>
+                            <select id="courseCategory" name="category" required>
+                                <option value="">Select Primary Category</option>
+                                <option value="surgery">Surgery</option>
+                                <option value="internal_medicine">Internal Medicine</option>
+                                <option value="diagnostics">Diagnostics</option>
+                                <option value="emergency_care">Emergency & Critical Care</option>
+                                <option value="pharmacology">Pharmacology</option>
+                                <option value="dentistry">Veterinary Dentistry</option>
+                                <option value="dermatology">Dermatology</option>
+                                <option value="ophthalmology">Ophthalmology</option>
+                                <option value="cardiology">Cardiology</option>
+                                <option value="neurology">Neurology</option>
+                                <option value="oncology">Oncology</option>
+                                <option value="exotic_animals">Exotic Animals</option>
+                                <option value="large_animals">Large Animals</option>
+                                <option value="practice_management">Practice Management</option>
+                                <option value="veterinary_business">Veterinary Business</option>
+                                <option value="research_methods">Research Methods</option>
+                                <option value="veterinary_education">Veterinary Education</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="courseLevel">Course Level *</label>
+                            <select id="courseLevel" name="level" required>
+                                <option value="">Select Level</option>
+                                <option value="beginner">Beginner</option>
+                                <option value="intermediate">Intermediate</option>
+                                <option value="advanced">Advanced</option>
+                                <option value="expert">Expert/Professional</option>
+                                <option value="all_levels">All Levels</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Course Duration & Structure -->
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="totalHours">Total Course Hours *</label>
+                            <input type="number" id="totalHours" name="total_hours" min="1" max="500" placeholder="e.g., 40" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="lecturesCount">Number of Lectures *</label>
+                            <input type="number" id="lecturesCount" name="lectures_count" min="1" max="1000" placeholder="e.g., 25" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="courseDuration">Course Access Duration</label>
+                            <select id="courseDuration" name="access_duration">
+                                <option value="lifetime">Lifetime Access</option>
+                                <option value="365" selected>1 Year</option>
+                                <option value="180">6 Months</option>
+                                <option value="90">3 Months</option>
+                                <option value="30">1 Month</option>
+                                <option value="custom">Custom Duration</option>
+                            </select>
+                        </div>
+                        
+                    
+                    </div>
+                    
+                    <!-- Pricing -->
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="coursePrice">Course Price (USD) *</label>
+                            <input type="number" id="coursePrice" name="price" min="0" step="0.01" placeholder="0.00" required>
+                            <small>Set your course price. Enter 0 for free courses.</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="currency">Currency *</label>
+                            <select id="currency" name="currency" required>
+                                <option value="USD" selected>USD ($)</option>
+                                <option value="EUR">EUR (€)</option>
+                                <option value="GBP">GBP (£)</option>
+                                <option value="CAD">CAD (C$)</option>
+                                <option value="AUD">AUD (A$)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    <!-- Prerequisites -->
+                    <div class="form-group">
+                        <label for="prerequisites">Prerequisites & Requirements</label>
+                        <textarea id="prerequisites" name="prerequisites" 
+                                placeholder="List any prerequisites, required knowledge, or equipment needed for this course..." 
+                                rows="3"></textarea>
+                    </div>
+                    
+                    <!-- Course Materials -->
+                    <div class="form-group">
+                        <label>Course Materials Included *</label>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 10px;">
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" name="materials[]" value="video_lectures" checked>
+                                Video Lectures
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" name="materials[]" value="downloadable_resources" checked>
+                                Downloadable Resources
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" name="materials[]" value="quizzes" checked>
+                                Quizzes & Assessments
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" name="materials[]" value="assignments">
+                                Practical Assignments
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" name="materials[]" value="case_studies">
+                                Case Studies
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" name="materials[]" value="articles">
+                                Research Articles
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" name="materials[]" value="certificate">
+                                Completion Certificate
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" name="materials[]" value="lifetime_access">
+                                Lifetime Access
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Media Uploads -->
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="courseThumbnail">Course Thumbnail Image *</label>
+                            <input type="file" id="courseThumbnail" name="thumbnail" accept="image/*" required>
+                            <small>Recommended size: 1280x720 pixels</small>
+                        </div>
+                        
+                    </div>
+                    
+                    <!-- Course Curriculum -->
+                    <div class="form-group">
+                        <label for="courseCurriculum">Course Curriculum Outline *</label>
+                        <textarea id="courseCurriculum" name="curriculum" 
+                                placeholder="Provide a detailed curriculum outline with sections and lectures. Format: Section 1: Title → Lecture 1.1: Title, Lecture 1.2: Title..." 
+                                rows="8" required></textarea>
+                        <small>Use this format: Section Title → Lecture Title 1, Lecture Title 2...</small>
+                    </div>
+                    
+                    <!-- Instructor Information -->
+                    <div class="form-group">
+                        <label for="instructorBio">Instructor Biography *</label>
+                        <textarea id="instructorBio" name="instructor_bio" 
+                                placeholder="Share your professional background, qualifications, and experience relevant to this course..." 
+                                rows="4" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="instructorQualifications">Qualifications & Credentials *</label>
+                        <textarea id="instructorQualifications" name="qualifications" 
+                                placeholder="List your degrees, certifications, licenses, and relevant professional achievements..." 
+                                rows="3" required></textarea>
+                    </div>
+                    
+                    <!-- Language & Accessibility -->
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="courseLanguage">Course Language *</label>
+                            <select id="courseLanguage" name="language" required>
+                                <option value="english" selected>English</option>
+                                <option value="spanish">Spanish</option>
+                                <option value="french">French</option>
+                                <option value="german">German</option>
+                                <option value="arabic">Arabic</option>
+                                <option value="chinese">Chinese</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                    </div>
+                    
+                    
+                    <!-- Terms & Conditions -->
+                    <div class="form-group">
+                        <label style="display: flex; align-items: flex-start; gap: 10px;">
+                            <input type="checkbox" name="terms_accepted" required style="margin-top: 3px;">
+                            <span>
+                                I agree to the <a href="./privacy-policy.html" style="color: var(--primary-blue);">V-College Terms of Service</a> and confirm that I have the necessary qualifications and rights to publish this course content. *
+                            </span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="display: flex; align-items: flex-start; gap: 10px;">
+                            <input type="checkbox" name="content_original" required style="margin-top: 3px;">
+                            <span>
+                                I confirm that all course content is original or properly licensed, and does not infringe on any copyrights or intellectual property rights. *
+                            </span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="backStep2">Back</button>
+                        <button type="submit" class="btn btn-primary">Publish Course</button>
+                    </div>
+                </form>
+            
+                <!-- Add this form to your existing forms in add-post.html -->
+                <form id="vGuideForm" enctype="multipart/form-data">
+                    <input type="hidden" name="category" class="category-input" value="v_guide">
+                    <input type="hidden" name="user_id" value="1">
+                    
+                    <!-- Basic Information Section -->
+                    <div class="form-section">
+                        <h2 class="section-title">
+                            <i class="fas fa-info-circle"></i>
+                            Basic Information
+                        </h2>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                Entry Title <span class="required">*</span>
+                            </label>
+                            <input type="text" class="form-control" name="entry_title" placeholder="e.g., Canine Parvovirus: Diagnosis and Treatment" required>
+                            <div class="form-hint">Choose a clear, descriptive title that summarizes the content</div>
+                        </div>
+                
+                        <div class="form-group">
+                            <label class="form-label">
+                                Category <span class="required">*</span>
+                            </label>
+                            <select class="form-control form-select" name="category" required>
+                                <option value="">Select a category</option>
+                                <option value="anatomy">Anatomy</option>
+                                <option value="diseases">Diseases & Conditions</option>
+                                <option value="diagnostics">Diagnostic Tools</option>
+                                <option value="medications">Medications</option>
+                                <option value="surgery">Surgical Procedures</option>
+                                <option value="species">Animal Species</option>
+                            </select>
+                        </div>
+                
+                        <div class="form-group">
+                            <label class="form-label">
+                                Animal Type <span class="required">*</span>
+                            </label>
+                            <select class="form-control form-select" name="animal_type" required>
+                                <option value="">Select animal type</option>
+                                <option value="canine">Canine</option>
+                                <option value="feline">Feline</option>
+                                <option value="equine">Equine</option>
+                                <option value="bovine">Bovine</option>
+                                <option value="avian">Avian</option>
+                                <option value="exotic">Exotic Animals</option>
+                                <option value="multiple">Multiple Species</option>
+                            </select>
+                        </div>
+                    </div>
+                
+                    <!-- Content Section -->
+                    <div class="form-section">
+                        <h2 class="section-title">
+                            <i class="fas fa-file-alt"></i>
+                            Content
+                        </h2>
+                
+                        <div class="form-group">
+                            <label class="form-label">
+                                Summary <span class="required">*</span>
+                            </label>
+                            <textarea class="form-control" name="summary" placeholder="Provide a brief overview of the topic..." required></textarea>
+                            <div class="form-hint">Write a concise summary that will appear in search results and category listings</div>
+                        </div>
+                
+                        <div class="form-group">
+                            <label class="form-label">
+                                Detailed Content <span class="required">*</span>
+                            </label>
+                            <div class="editor-toolbar">
+                                <button type="button" class="editor-btn" title="Bold"><i class="fas fa-bold"></i></button>
+                                <button type="button" class="editor-btn" title="Italic"><i class="fas fa-italic"></i></button>
+                                <button type="button" class="editor-btn" title="Underline"><i class="fas fa-underline"></i></button>
+                                <button type="button" class="editor-btn" title="Bullet List"><i class="fas fa-list-ul"></i></button>
+                                <button type="button" class="editor-btn" title="Numbered List"><i class="fas fa-list-ol"></i></button>
+                                <button type="button" class="editor-btn" title="Insert Image"><i class="fas fa-image"></i></button>
+                                <button type="button" class="editor-btn" title="Insert Link"><i class="fas fa-link"></i></button>
+                            </div>
+                            <div class="editor-content" contenteditable="true" name="detailed_content">
+                                <p>Start writing your detailed guide here...</p>
+                                <p><br></p>
+                                <p>You can include:</p>
+                                <ul>
+                                    <li>Symptoms and clinical signs</li>
+                                    <li>Diagnostic methods</li>
+                                    <li>Treatment protocols</li>
+                                    <li>Prevention strategies</li>
+                                    <li>Prognosis information</li>
+                                </ul>
+                            </div>
+                            <div class="form-hint">Use the toolbar to format your content. You can add images, lists, and links.</div>
+                        </div>
+                    </div>
+                
+                    <!-- Media & References -->
+                    <div class="form-section">
+                        <h2 class="section-title">
+                            <i class="fas fa-images"></i>
+                            Media & References
+                        </h2>
+                
+                        <div class="form-group">
+                            <label class="form-label">Featured Image</label>
+                            <div class="file-upload-area" id="featuredImageUpload">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <div class="file-upload-text">Drag & drop an image here or click to browse</div>
+                                <input type="file" name="featured_image" accept="image/*" style="display: none;">
+                                <button type="button" class="file-upload-btn">Choose File</button>
+                                <div class="form-hint">Recommended: 1200x630px, JPG or PNG, max 5MB</div>
+                            </div>
+                            <!-- Featured Image Preview -->
+                            <div class="file-preview-container" id="featuredImagePreview">
+                                <div class="file-preview-grid">
+                                    <!-- Preview items will be added here dynamically -->
+                                </div>
+                            </div>
+                        </div>
+                
+                        <div class="form-group">
+                            <label class="form-label">Additional Images</label>
+                            <div class="file-upload-area" id="additionalImagesUpload">
+                                <i class="fas fa-images"></i>
+                                <div class="file-upload-text">Add supporting images, diagrams, or charts</div>
+                                <input type="file" name="additional_images" accept="image/*" multiple style="display: none;">
+                                <button type="button" class="file-upload-btn">Add Images</button>
+                            </div>
+                            <!-- Additional Images Preview -->
+                            <div class="file-preview-container" id="additionalImagesPreview">
+                                <div class="file-preview-grid">
+                                    <!-- Preview items will be added here dynamically -->
+                                </div>
+                            </div>
+                        </div>
+                
+                        <div class="form-group">
+                            <label class="form-label">References & Citations</label>
+                            <textarea class="form-control" name="references" placeholder="List your references and citations here..."></textarea>
+                            <div class="form-hint">Include academic papers, textbooks, or other authoritative sources</div>
+                        </div>
+                    </div>
+                
+                    <!-- Tags & Metadata -->
+                    <div class="form-section">
+                        <h2 class="section-title">
+                            <i class="fas fa-tags"></i>
+                            Tags & Metadata
+                        </h2>
+                
+                        <div class="form-group">
+                            <label class="form-label">
+                                Keywords & Tags <span class="required">*</span>
+                            </label>
+                            <input type="text" class="form-control" name="keywords" placeholder="Add tags separated by commas...">
+                            <div class="tags-container">
+                                <div class="tag">
+                                    veterinary <span class="tag-remove">&times;</span>
+                                </div>
+                                <div class="tag">
+                                    medicine <span class="tag-remove">&times;</span>
+                                </div>
+                            </div>
+                            <div class="form-hint">Add relevant keywords to help users find your content</div>
+                        </div>
+                
+                        <div class="form-group">
+                            <label class="form-label">Difficulty Level</label>
+                            <select class="form-control form-select" name="difficulty_level">
+                                <option value="beginner">Beginner</option>
+                                <option value="intermediate" selected>Intermediate</option>
+                                <option value="advanced">Advanced</option>
+                                <option value="expert">Expert</option>
+                            </select>
+                        </div>
+                
+                        <div class="form-group">
+                            <label class="form-label">
+                                <input type="checkbox" name="original_content" value="1" checked>
+                                I confirm that this content is original and does not violate any copyrights
+                            </label>
+                        </div>
+                    </div>
+                
+                    <!-- Terms & Conditions -->
+                    <div class="form-group">
+                        <label style="display: flex; align-items: flex-start; gap: 10px;">
+                            <input type="checkbox" name="terms_accepted" required style="margin-top: 3px;">
+                            <span>
+                                I agree to the <a href="#" style="color: var(--primary-blue);">V-Guide Terms of Service</a> and confirm that all information provided is accurate and truthful. *
+                            </span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="backStep2">Back</button>
+                        <button type="submit" class="btn btn-primary">Create V-Guide Profile</button>
+                    </div>
+                </form>
+                
+                <script>
+                    // File Upload and Preview Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize file upload functionality
+    initializeFileUpload('featuredImageUpload', 'featuredImagePreview', false);
+    initializeFileUpload('additionalImagesUpload', 'additionalImagesPreview', true);
+});
+
+function initializeFileUpload(uploadAreaId, previewContainerId, allowMultiple) {
+    const uploadArea = document.getElementById(uploadAreaId);
+    const fileInput = uploadArea.querySelector('input[type="file"]');
+    const previewContainer = document.getElementById(previewContainerId);
+    const previewGrid = previewContainer.querySelector('.file-preview-grid');
+    const uploadBtn = uploadArea.querySelector('.file-upload-btn');
+
+    // Click handler for upload button
+    uploadBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        fileInput.click();
+    });
+
+    // Click handler for upload area
+    uploadArea.addEventListener('click', function() {
+        fileInput.click();
+    });
+
+    // File input change handler
+    fileInput.addEventListener('change', function(e) {
+        handleFiles(e.target.files, uploadArea, previewGrid, allowMultiple);
+    });
+
+    // Drag and drop functionality
+    uploadArea.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        uploadArea.classList.add('drag-over');
+    });
+
+    uploadArea.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        if (!uploadArea.contains(e.relatedTarget)) {
+            uploadArea.classList.remove('drag-over');
+        }
+    });
+
+    uploadArea.addEventListener('drop', function(e) {
+        e.preventDefault();
+        uploadArea.classList.remove('drag-over');
+        
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            handleFiles(files, uploadArea, previewGrid, allowMultiple);
+        }
+    });
+
+    // Prevent default behavior for drag events
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        uploadArea.addEventListener(eventName, function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+    });
+}
+
+function handleFiles(files, uploadArea, previewGrid, allowMultiple) {
+    const validFiles = Array.from(files).filter(file => isValidFile(file));
+    
+    if (validFiles.length === 0) {
+        showError(uploadArea, 'Please select valid image files (JPG, PNG, GIF) under 5MB');
+        return;
+    }
+
+    if (!allowMultiple) {
+        // For single file upload (featured image), clear previous files
+        previewGrid.innerHTML = '';
+        validFiles.splice(1); // Keep only the first file
+    }
+
+    // Show multiple files indicator if needed
+    if (allowMultiple && validFiles.length > 1) {
+        showMultipleFilesIndicator(uploadArea, validFiles.length);
+    }
+
+    // Process each file
+    validFiles.forEach(file => {
+        createFilePreview(file, previewGrid, uploadArea);
+    });
+
+    // Update upload area state
+    uploadArea.classList.add('has-file');
+    previewGrid.parentElement.classList.add('show');
+
+    // Clear any existing errors
+    clearError(uploadArea);
+}
+
+function isValidFile(file) {
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    const maxSize = 5 * 1024 * 1024; // 5MB
+
+    if (!validTypes.includes(file.type)) {
+        return false;
+    }
+
+    if (file.size > maxSize) {
+        return false;
+    }
+
+    return true;
+}
+
+function createFilePreview(file, previewGrid, uploadArea) {
+    const previewItem = document.createElement('div');
+    previewItem.className = 'file-preview-item';
+    
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+        previewItem.innerHTML = `
+            <img src="${e.target.result}" alt="${file.name}" class="file-preview-image">
+            <div class="file-preview-info">
+                <div class="file-preview-name">${truncateFileName(file.name)}</div>
+                <div class="file-preview-size">${formatFileSize(file.size)}</div>
+            </div>
+            <button type="button" class="file-remove-btn" title="Remove file">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+
+        // Add remove functionality
+        const removeBtn = previewItem.querySelector('.file-remove-btn');
+        removeBtn.addEventListener('click', function() {
+            previewItem.remove();
+            updateUploadAreaState(uploadArea, previewGrid);
+        });
+
+        previewGrid.appendChild(previewItem);
+    };
+    
+    reader.readAsDataURL(file);
+}
+
+function updateUploadAreaState(uploadArea, previewGrid) {
+    const hasFiles = previewGrid.children.length > 0;
+    
+    if (hasFiles) {
+        uploadArea.classList.add('has-file');
+    } else {
+        uploadArea.classList.remove('has-file');
+        previewGrid.parentElement.classList.remove('show');
+    }
+    
+    // Update multiple files indicator
+    const indicator = uploadArea.querySelector('.multiple-files-indicator');
+    if (indicator) {
+        if (previewGrid.children.length <= 1) {
+            indicator.remove();
+        } else {
+            indicator.textContent = previewGrid.children.length;
+        }
+    }
+}
+
+function showMultipleFilesIndicator(uploadArea, fileCount) {
+    // Remove existing indicator if any
+    const existingIndicator = uploadArea.querySelector('.multiple-files-indicator');
+    if (existingIndicator) {
+        existingIndicator.remove();
+    }
+
+    const indicator = document.createElement('div');
+    indicator.className = 'multiple-files-indicator';
+    indicator.textContent = fileCount;
+    uploadArea.appendChild(indicator);
+}
+
+function showError(uploadArea, message) {
+    // Remove existing error if any
+    clearError(uploadArea);
+    
+    uploadArea.classList.add('error');
+    
+    const errorMessage = document.createElement('div');
+    errorMessage.className = 'file-error-message show';
+    errorMessage.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
+    
+    uploadArea.appendChild(errorMessage);
+    
+    // Auto-remove error after 5 seconds
+    setTimeout(() => {
+        clearError(uploadArea);
+    }, 5000);
+}
+
+function clearError(uploadArea) {
+    uploadArea.classList.remove('error');
+    const errorMessage = uploadArea.querySelector('.file-error-message');
+    if (errorMessage) {
+        errorMessage.remove();
+    }
+}
+
+function truncateFileName(filename, maxLength = 15) {
+    if (filename.length <= maxLength) return filename;
+    
+    const extension = filename.split('.').pop();
+    const nameWithoutExt = filename.substring(0, filename.lastIndexOf('.'));
+    const truncatedName = nameWithoutExt.substring(0, maxLength - extension.length - 3);
+    
+    return `${truncatedName}...${extension}`;
+}
+
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+// Form submission handler
+document.getElementById('vGuideForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Validate files before submission
+    if (!validateFilesBeforeSubmit()) {
+        showGeneralError('Please fix file upload errors before submitting.');
+        return;
+    }
+    
+    // Collect file data for submission
+    const formData = new FormData(this);
+    
+    // You can add additional processing here if needed
+    console.log('Form submitted with files');
+    
+    // Simulate form submission (replace with actual AJAX call)
+    simulateFormSubmission(formData);
+});
+
+function validateFilesBeforeSubmit() {
+    const featuredPreview = document.getElementById('featuredImagePreview');
+    const additionalPreview = document.getElementById('additionalImagesPreview');
+    
+    // Check if featured image is required and present
+    const featuredImageInput = document.querySelector('input[name="featured_image"]');
+    if (featuredImageInput.hasAttribute('required') && featuredPreview.children.length === 0) {
+        showError(document.getElementById('featuredImageUpload'), 'Featured image is required');
+        return false;
+    }
+    
+    // Validate file sizes and types
+    const allPreviews = document.querySelectorAll('.file-preview-item');
+    for (let preview of allPreviews) {
+        // You could add additional validation here if needed
+    }
+    
+    return true;
+}
+
+function showGeneralError(message) {
+    // Create or show a general error message container
+    let errorContainer = document.getElementById('formErrorContainer');
+    if (!errorContainer) {
+        errorContainer = document.createElement('div');
+        errorContainer.id = 'formErrorContainer';
+        errorContainer.style.cssText = `
+            background: var(--light-red);
+            color: var(--primary-red);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary-red);
+        `;
+        document.querySelector('form').insertBefore(errorContainer, document.querySelector('form').firstChild);
+    }
+    
+    errorContainer.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${message}`;
+    errorContainer.style.display = 'block';
+    
+    // Scroll to error
+    errorContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function simulateFormSubmission(formData) {
+    const submitBtn = document.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    
+    // Show loading state
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+    submitBtn.disabled = true;
+    
+    // Simulate API call (replace with actual fetch/AJAX)
+    setTimeout(() => {
+        // Success simulation
+        showSuccessMessage('Your V-Guide content has been submitted successfully!');
+        
+        // Reset button
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+        
+        // Optionally reset form
+        // document.getElementById('vGuideForm').reset();
+        // document.querySelectorAll('.file-preview-container').forEach(container => {
+        //     container.classList.remove('show');
+        //     container.querySelector('.file-preview-grid').innerHTML = '';
+        // });
+        // document.querySelectorAll('.file-upload-area').forEach(area => {
+        //     area.classList.remove('has-file', 'error');
+        // });
+        
+    }, 2000);
+}
+
+function showSuccessMessage(message) {
+    const successContainer = document.createElement('div');
+    successContainer.style.cssText = `
+        background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+        color: #155724;
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border-left: 4px solid #28a745;
+        animation: slideDown 0.5s ease;
+    `;
+    successContainer.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <i class="fas fa-check-circle" style="color: #28a745; font-size: 18px;"></i>
+            <span style="font-weight: 500;">${message}</span>
+        </div>
+    `;
+    
+    document.querySelector('form').insertBefore(successContainer, document.querySelector('form').firstChild);
+    
+    // Auto-remove success message after 5 seconds
+    setTimeout(() => {
+        successContainer.remove();
+    }, 5000);
+}
+
+// Additional CSS for dynamic elements
+const dynamicStyles = `
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.file-error-message {
+    background: var(--light-red);
+    color: var(--primary-red);
+    padding: 10px 12px;
+    border-radius: 6px;
+    margin-top: 10px;
+    border-left: 3px solid var(--primary-red);
+    font-size: 12px;
+    animation: slideDown 0.3s ease;
+}
+
+.file-error-message i {
+    margin-right: 6px;
+}
+
+.file-success-message {
+    background: var(--light-green);
+    color: var(--success-green);
+    padding: 10px 12px;
+    border-radius: 6px;
+    margin-top: 10px;
+    border-left: 3px solid var(--success-green);
+    font-size: 12px;
+    animation: slideDown 0.3s ease;
+}
+`;
+
+// Add dynamic styles to the document
+const styleSheet = document.createElement('style');
+styleSheet.textContent = dynamicStyles;
+document.head.appendChild(styleSheet);
+
+                    // File upload area interaction
+                    const fileUploadAreas = document.querySelectorAll('.file-upload-area');
+                    fileUploadAreas.forEach(area => {
+                        area.addEventListener('click', function() {
+                            const fileInput = this.querySelector('input[type="file"]');
+                            if (fileInput) {
+                                fileInput.click();
+                            }
+                        });
+                    });
+                
+                    // Form submission
+                    const form = document.getElementById('vGuideForm');
+                    form.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        alert('Your V-Guide content has been submitted successfully!');
+                        // In a real application, you would submit the form data to the server
+                    });
+                
+                    // Tag input functionality
+                    const tagInput = document.querySelector('input[name="keywords"]');
+                    const tagsContainer = document.querySelector('.tags-container');
+                    
+                    tagInput.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter' || e.key === ',') {
+                            e.preventDefault();
+                            const tagText = this.value.trim();
+                            if (tagText) {
+                                addTag(tagText);
+                                this.value = '';
+                            }
+                        }
+                    });
+                
+                    function addTag(text) {
+                        const tag = document.createElement('div');
+                        tag.className = 'tag';
+                        tag.innerHTML = `
+                            ${text}
+                            <span class="tag-remove">&times;</span>
+                        `;
+                        tagsContainer.appendChild(tag);
+                        
+                        // Add remove functionality
+                        tag.querySelector('.tag-remove').addEventListener('click', function() {
+                            tag.remove();
+                        });
+                    }
+                
+                    // Editor button functionality
+                    const editorButtons = document.querySelectorAll('.editor-btn');
+                    editorButtons.forEach(button => {
+                        button.addEventListener('click', function() {
+                            const command = this.title.toLowerCase();
+                            alert(`Editor command: ${command}`);
+                            // In a real application, you would implement rich text editor functionality
+                        });
+                    });
+                
+                    // Back button functionality
+                    const backButton = document.getElementById('backStep2');
+                    backButton.addEventListener('click', function() {
+                        alert('Going back to previous step...');
+                        // In a real application, you would navigate back
+                    });
+                </script>
+                <!-- Add this form to your existing forms in add-post.html -->
+<form id="vNationForm" enctype="multipart/form-data">
+    <input type="hidden" name="category" class="category-input" value="v_nation">
+    <input type="hidden" name="user_id" value="1">
+    
+    <!-- Post Type Selection -->
+    <div class="form-group">
+        <label for="postType">Post Type *</label>
+        <select id="postType" name="post_type" required onchange="togglePostType()">
+            <option value="">Select Post Type</option>
+            <option value="social_post">Social Post</option>
+            <option value="highlight">Highlight</option>
+            <option value="reel">Reel</option>
+            <option value="story">Story</option>
+            <option value="social_page">Social Page</option>
+            <option value="social_group">Social Group</option>
+        </select>
+    </div>
+    
+    <!-- Social Post Fields -->
+    <div id="socialPostFields" style="display: none;">
+        <div class="form-group">
+            <label for="postContent">What's happening in the veterinary world? *</label>
+            <textarea id="postContent" name="content" 
+                      placeholder="Share your thoughts, cases, insights, or questions with the veterinary community..." 
+                      rows="4" required></textarea>
+            <small id="charCount">280 characters remaining</small>
+        </div>
+        
+        <!-- Media Upload -->
+        <div class="form-group">
+            <label>Add Media (Optional)</label>
+            <div class="media-upload-options" style="display: flex; gap: 15px; margin-top: 10px;">
+                <label class="media-option" style="flex: 1; text-align: center; padding: 15px; border: 2px dashed var(--border-color); border-radius: 8px; cursor: pointer;">
+                    <i class="fas fa-image" style="font-size: 24px; color: var(--primary-blue); margin-bottom: 8px;"></i>
+                    <div>Add Photos</div>
+                    <input type="file" name="images[]" accept="image/*" multiple style="display: none;" onchange="handleMediaSelection(this, 'images')">
+                </label>
+                <label class="media-option" style="flex: 1; text-align: center; padding: 15px; border: 2px dashed var(--border-color); border-radius: 8px; cursor: pointer;">
+                    <i class="fas fa-video" style="font-size: 24px; color: var(--primary-red); margin-bottom: 8px;"></i>
+                    <div>Add Video</div>
+                    <input type="file" name="video" accept="video/*" style="display: none;" onchange="handleMediaSelection(this, 'video')">
+                </label>
+                <label class="media-option" style="flex: 1; text-align: center; padding: 15px; border: 2px dashed var(--border-color); border-radius: 8px; cursor: pointer;">
+                    <i class="fas fa-file" style="font-size: 24px; color: var(--primary-blue); margin-bottom: 8px;"></i>
+                    <div>Add Document</div>
+                    <input type="file" name="document" accept=".pdf,.doc,.docx" style="display: none;" onchange="handleMediaSelection(this, 'document')">
+                </label>
+            </div>
+        </div>
+        
+        <!-- Media Preview -->
+        <div id="mediaPreview" style="display: none; margin-top: 15px;">
+            <div class="media-preview-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px;"></div>
+        </div>
+        
+        <!-- Post Category -->
+        <div class="form-group">
+            <label for="postCategory">Post Category *</label>
+            <select id="postCategory" name="post_category" required>
+                <option value="">Select Category</option>
+                <option value="case_study">Case Study</option>
+                <option value="clinical_tips">Clinical Tips</option>
+                <option value="research_news">Research News</option>
+                <option value="practice_life">Practice Life</option>
+                <option value="educational">Educational Content</option>
+                <option value="question">Question/Discussion</option>
+                <option value="announcement">Announcement</option>
+                <option value="event">Event</option>
+                <option value="product_review">Product Review</option>
+                <option value="inspirational">Inspirational</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        
+        <!-- Audience Selection -->
+        <div class="form-group">
+            <label for="postAudience">Audience *</label>
+            <select id="postAudience" name="audience" required>
+                <option value="public">Public - All V-Nation Members</option>
+                <option value="followers">Followers Only</option>
+                <option value="connections">Connections Only</option>
+                <option value="custom">Custom Audience</option>
+            </select>
+        </div>
+        
+        <!-- Hashtags -->
+        <div class="form-group">
+            <label for="postHashtags">Hashtags</label>
+            <input type="text" id="postHashtags" name="hashtags" placeholder="e.g., #veterinarymedicine #surgery #casestudy">
+            <small>Add relevant hashtags to increase visibility (separate with spaces)</small>
+        </div>
+        
+        <!-- Post Location -->
+        <div class="form-group">
+            <label for="postLocation">Add Location (Optional)</label>
+            <input type="text" id="postLocation" name="location" placeholder="e.g., New York Animal Hospital">
+        </div>
+    </div>
+    
+    <!-- Highlight Fields -->
+    <div id="highlightFields" style="display: none;">
+        <div class="form-group">
+            <label for="highlightTitle">Highlight Title *</label>
+            <input type="text" id="highlightTitle" name="title" placeholder="e.g., Surgical Success Stories" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="highlightDescription">Highlight Description</label>
+            <textarea id="highlightDescription" name="description" 
+                      placeholder="Describe this highlight collection..." 
+                      rows="3"></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="highlightCover">Highlight Cover Image *</label>
+            <input type="file" id="highlightCover" name="cover_image" accept="image/*" required>
+            <small>Recommended: Square image, 1080x1080 pixels</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="highlightStories">Add Stories to Highlight *</label>
+            <select id="highlightStories" name="stories[]" multiple required style="height: 120px;">
+                <option value="recent_stories">Recent Stories</option>
+                <option value="surgical_cases">Surgical Cases</option>
+                <option value="diagnostic_challenges">Diagnostic Challenges</option>
+                <option value="patient_success">Patient Success Stories</option>
+                <option value="educational_content">Educational Content</option>
+                <option value="practice_tips">Practice Tips</option>
+                <option value="research_highlights">Research Highlights</option>
+                <option value="conference_moments">Conference Moments</option>
+            </select>
+            <small>Hold Ctrl/Cmd to select multiple stories</small>
+        </div>
+    </div>
+    
+    <!-- Reel Fields -->
+    <div id="reelFields" style="display: none;">
+        <div class="form-group">
+            <label for="reelVideo">Upload Reel Video *</label>
+            <input type="file" id="reelVideo" name="video" accept="video/*" required>
+            <small>Maximum duration: 90 seconds. Recommended: 9:16 aspect ratio</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="reelCaption">Reel Caption *</label>
+            <textarea id="reelCaption" name="caption" 
+                      placeholder="Add a compelling caption for your reel..." 
+                      rows="3" required></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="reelAudio">Add Audio/Sound</label>
+            <select id="reelAudio" name="audio">
+                <option value="">Original Sound</option>
+                <option value="trending_1">Trending Sound 1</option>
+                <option value="trending_2">Trending Sound 2</option>
+                <option value="educational">Educational Voiceover</option>
+                <option value="custom">Custom Audio</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="reelHashtags">Reel Hashtags *</label>
+            <input type="text" id="reelHashtags" name="hashtags" 
+                   placeholder="e.g., #veterinaryreels #animalcare #vetlife" required>
+        </div>
+    </div>
+    
+    <!-- Story Fields -->
+    <div id="storyFields" style="display: none;">
+        <div class="form-group">
+            <label for="storyMedia">Story Media *</label>
+            <input type="file" id="storyMedia" name="media" accept="image/*,video/*" required>
+            <small>Image or video (max 15 seconds). Recommended: 9:16 aspect ratio</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="storyText">Story Text (Optional)</label>
+            <textarea id="storyText" name="text" 
+                      placeholder="Add text to your story..." 
+                      rows="2"></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="storyDuration">Story Duration</label>
+            <select id="storyDuration" name="duration">
+                <option value="24">24 Hours</option>
+                <option value="custom">Custom Duration</option>
+                <option value="highlight">Add to Highlight</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="storyMention">Mention People (Optional)</label>
+            <input type="text" id="storyMention" name="mentions" placeholder="@username">
+        </div>
+        
+        <div class="form-group">
+            <label for="storyLocation">Add Location (Optional)</label>
+            <input type="text" id="storyLocation" name="location" placeholder="Your location">
+        </div>
+    </div>
+    
+    <!-- Social Page Fields -->
+    <div id="socialPageFields" style="display: none;">
+        <div class="form-group">
+            <label for="pageName">Page Name *</label>
+            <input type="text" id="pageName" name="page_name" placeholder="e.g., Advanced Veterinary Surgery" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="pageCategory">Page Category *</label>
+            <select id="pageCategory" name="page_category" required>
+                <option value="">Select Category</option>
+                <option value="veterinary_clinic">Veterinary Clinic</option>
+                <option value="specialist_practice">Specialist Practice</option>
+                <option value="educational">Educational Content</option>
+                <option value="product_brand">Product/Brand</option>
+                <option value="professional_community">Professional Community</option>
+                <option value="research">Research Group</option>
+                <option value="animal_welfare">Animal Welfare</option>
+                <option value="veterinary_news">Veterinary News</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="pageDescription">Page Description *</label>
+            <textarea id="pageDescription" name="description" 
+                      placeholder="Describe your page's purpose and content..." 
+                      rows="4" required></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="pageProfileImage">Profile Image *</label>
+            <input type="file" id="pageProfileImage" name="profile_image" accept="image/*" required>
+            <small>Recommended: Square image, 400x400 pixels</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="pageCoverImage">Cover Image *</label>
+            <input type="file" id="pageCoverImage" name="cover_image" accept="image/*" required>
+            <small>Recommended: 1640x856 pixels</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="pageVisibility">Page Visibility *</label>
+            <select id="pageVisibility" name="visibility" required>
+                <option value="public">Public</option>
+                <option value="private">Private</option>
+                <option value="unlisted">Unlisted</option>
+            </select>
+        </div>
+    </div>
+    
+    <!-- Social Group Fields -->
+    <div id="socialGroupFields" style="display: none;">
+        <div class="form-group">
+            <label for="groupName">Group Name *</label>
+            <input type="text" id="groupName" name="group_name" placeholder="e.g., Emergency Veterinarians Network" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="groupCategory">Group Category *</label>
+            <select id="groupCategory" name="group_category" required>
+                <option value="">Select Category</option>
+                <option value="professional_network">Professional Network</option>
+                <option value="case_discussion">Case Discussion</option>
+                <option value="specialty_group">Specialty Group</option>
+                <option value="regional_network">Regional Network</option>
+                <option value="research_collaboration">Research Collaboration</option>
+                <option value="educational">Study Group</option>
+                <option value="support_community">Support Community</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="groupDescription">Group Description *</label>
+            <textarea id="groupDescription" name="description" 
+                      placeholder="Describe your group's purpose and rules..." 
+                      rows="4" required></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="groupPrivacy">Group Privacy *</label>
+            <select id="groupPrivacy" name="privacy" required>
+                <option value="public">Public - Anyone can join</option>
+                <option value="private">Private - Approval required</option>
+                <option value="secret">Secret - Invitation only</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="groupProfileImage">Group Profile Image</label>
+            <input type="file" id="groupProfileImage" name="profile_image" accept="image/*">
+            <small>Recommended: Square image, 400x400 pixels</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="groupTags">Group Tags</label>
+            <input type="text" id="groupTags" name="tags" placeholder="e.g., emergency, surgery, critical care">
+            <small>Add tags to help members find your group</small>
+        </div>
+    </div>
+    
+    <!-- Common Fields for All Post Types -->
+    <div class="form-section">
+        <h3 style="color: var(--primary-blue); margin: 25px 0 15px; padding-bottom: 8px; border-bottom: 2px solid var(--primary-red);">Engagement Settings</h3>
+        
+        <div class="form-group">
+            <label for="commentsSetting">Comments Setting *</label>
+            <select id="commentsSetting" name="comments_setting" required>
+                <option value="enabled">Allow Comments</option>
+                <option value="restricted">Restricted Comments</option>
+                <option value="disabled">Disable Comments</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="likesSetting">Likes Setting *</label>
+            <select id="likesSetting" name="likes_setting" required>
+                <option value="enabled">Show Like Count</option>
+                <option value="hidden">Hide Like Count</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="sharingSetting">Sharing Setting *</label>
+            <select id="sharingSetting" name="sharing_setting" required>
+                <option value="enabled">Allow Sharing</option>
+                <option value="restricted">Restricted Sharing</option>
+                <option value="disabled">Disable Sharing</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label style="display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" name="enable_analytics" value="1" checked>
+                Enable performance analytics for this post
+            </label>
+        </div>
+        
+        <div class="form-group">
+            <label style="display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" name="push_notification" value="1" checked>
+                Send push notification to followers
+            </label>
+        </div>
+    </div>
+    
+    <!-- Scheduling Options -->
+    <div class="form-section">
+        <h3 style="color: var(--primary-blue); margin: 25px 0 15px; padding-bottom: 8px; border-bottom: 2px solid var(--primary-red);">Scheduling Options</h3>
+        
+        <div class="form-group">
+            <label for="publishTime">When to Publish? *</label>
+            <select id="publishTime" name="publish_time" required>
+                <option value="now">Publish Now</option>
+                <option value="schedule">Schedule for Later</option>
+                <option value="draft">Save as Draft</option>
+            </select>
+        </div>
+        
+        <div id="scheduleFields" style="display: none;">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="scheduleDate">Schedule Date *</label>
+                    <input type="date" id="scheduleDate" name="schedule_date">
+                </div>
+                <div class="form-group">
+                    <label for="scheduleTime">Schedule Time *</label>
+                    <input type="time" id="scheduleTime" name="schedule_time">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="timezone">Timezone *</label>
+                <select id="timezone" name="timezone">
+                    <option value="est">Eastern Time (ET)</option>
+                    <option value="cst">Central Time (CT)</option>
+                    <option value="mst">Mountain Time (MT)</option>
+                    <option value="pst">Pacific Time (PT)</option>
+                    <option value="gmt">Greenwich Mean Time (GMT)</option>
+                    <option value="cet">Central European Time (CET)</option>
+                    <option value="ast">Arab Standard Time (AST)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Cross-Posting Options -->
+    <div class="form-section">
+        <h3 style="color: var(--primary-blue); margin: 25px 0 15px; padding-bottom: 8px; border-bottom: 2px solid var(--primary-red);">Cross-Posting Options</h3>
+        
+        <div class="form-group">
+            <label>Also post to:</label>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 10px;">
+                <label style="display: flex; align-items: center; gap: 8px;">
+                    <input type="checkbox" name="crosspost[]" value="v_guide">
+                    V-Guide Profile
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px;">
+                    <input type="checkbox" name="crosspost[]" value="v_blog">
+                    V-Blog
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px;">
+                    <input type="checkbox" name="crosspost[]" value="linkedin">
+                    LinkedIn
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px;">
+                    <input type="checkbox" name="crosspost[]" value="twitter">
+                    Twitter
+                </label>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Terms & Conditions -->
+    <div class="form-group">
+        <label style="display: flex; align-items: flex-start; gap: 10px;">
+            <input type="checkbox" name="terms_accepted" required style="margin-top: 3px;">
+            <span>
+                I agree to the <a href="#" style="color: var(--primary-blue);">V-Nation Community Guidelines</a> and confirm that all content follows veterinary professional standards. *
+            </span>
+        </label>
+    </div>
+    
+    <div class="form-actions">
+        <button type="button" class="btn btn-secondary" id="backStep2">Back</button>
+        <button type="submit" class="btn btn-primary" id="submitButton">Publish to V-Nation</button>
+    </div>
+</form>
+
+<style>
+    /* Additional styles for V-Nation form */
+    #vNationForm select[multiple] {
+        min-height: 120px;
+        padding: 8px;
+    }
+    
+    #vNationForm small {
+        display: block;
+        color: var(--light-text);
+        margin-top: 4px;
+        font-size: 12px;
+    }
+    
+    #vNationForm .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-bottom: 1rem;
+    }
+    
+    #vNationForm .form-section {
+        margin-bottom: 2rem;
+    }
+    
+    #vNationForm .media-option:hover {
+        border-color: var(--primary-blue);
+        background-color: var(--light-blue);
+    }
+    
+    #vNationForm .media-preview-item {
+        position: relative;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    
+    #vNationForm .media-preview-item img,
+    #vNationForm .media-preview-item video {
+        width: 100%;
+        height: 100px;
+        object-fit: cover;
+    }
+    
+    #vNationForm .remove-media {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: var(--primary-red);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        font-size: 12px;
+    }
+    
+    #charCount {
+        text-align: right;
+        font-size: 12px;
+        color: var(--light-text);
+    }
+    
+    @media (max-width: 768px) {
+        #vNationForm .form-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        #vNationForm .media-upload-options {
+            flex-direction: column;
+        }
+    }
+</style>
+
+<script>
+    // Add this to your existing JavaScript in add-post.html
+    
+    // Update the categoryFormMap to include V-Nation
+    // Add this line to your existing categoryFormMap object:
+    // 'v_nation': 'vNationForm'
+    
+    // V-Nation form specific JavaScript
+    function togglePostType() {
+        const postType = document.getElementById('postType').value;
+        
+        // Hide all fields first
+        document.getElementById('socialPostFields').style.display = 'none';
+        document.getElementById('highlightFields').style.display = 'none';
+        document.getElementById('reelFields').style.display = 'none';
+        document.getElementById('storyFields').style.display = 'none';
+        document.getElementById('socialPageFields').style.display = 'none';
+        document.getElementById('socialGroupFields').style.display = 'none';
+        
+        // Show relevant fields
+        if (postType === 'social_post') {
+            document.getElementById('socialPostFields').style.display = 'block';
+            document.getElementById('submitButton').textContent = 'Publish Post';
+        } else if (postType === 'highlight') {
+            document.getElementById('highlightFields').style.display = 'block';
+            document.getElementById('submitButton').textContent = 'Create Highlight';
+        } else if (postType === 'reel') {
+            document.getElementById('reelFields').style.display = 'block';
+            document.getElementById('submitButton').textContent = 'Publish Reel';
+        } else if (postType === 'story') {
+            document.getElementById('storyFields').style.display = 'block';
+            document.getElementById('submitButton').textContent = 'Add to Story';
+        } else if (postType === 'social_page') {
+            document.getElementById('socialPageFields').style.display = 'block';
+            document.getElementById('submitButton').textContent = 'Create Page';
+        } else if (postType === 'social_group') {
+            document.getElementById('socialGroupFields').style.display = 'block';
+            document.getElementById('submitButton').textContent = 'Create Group';
+        }
+    }
+    
+    function handleMediaSelection(input, type) {
+        const previewContainer = document.querySelector('.media-preview-container');
+        const mediaPreview = document.getElementById('mediaPreview');
+        
+        if (input.files && input.files.length > 0) {
+            mediaPreview.style.display = 'block';
+            
+            Array.from(input.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const mediaItem = document.createElement('div');
+                    mediaItem.className = 'media-preview-item';
+                    
+                    if (type === 'images') {
+                        mediaItem.innerHTML = `
+                            <img src="${e.target.result}" alt="Preview">
+                            <button type="button" class="remove-media" onclick="removeMedia(this)">×</button>
+                        `;
+                    } else if (type === 'video') {
+                        mediaItem.innerHTML = `
+                            <video src="${e.target.result}" controls></video>
+                            <button type="button" class="remove-media" onclick="removeMedia(this)">×</button>
+                        `;
+                    }
+                    
+                    previewContainer.appendChild(mediaItem);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+    }
+    
+    function removeMedia(button) {
+        button.parentElement.remove();
+        const previewContainer = document.querySelector('.media-preview-container');
+        if (previewContainer.children.length === 0) {
+            document.getElementById('mediaPreview').style.display = 'none';
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const vNationForm = document.getElementById('vNationForm');
+        
+        if (vNationForm) {
+            // Initialize post type toggle
+            togglePostType();
+            
+            // Character counter for social posts
+            const postContent = document.getElementById('postContent');
+            const charCount = document.getElementById('charCount');
+            
+            if (postContent && charCount) {
+                postContent.addEventListener('input', function() {
+                    const remaining = 280 - this.value.length;
+                    charCount.textContent = `${remaining} characters remaining`;
+                    charCount.style.color = remaining < 0 ? 'var(--primary-red)' : 'var(--light-text)';
+                });
+            }
+            
+            // Schedule fields toggle
+            const publishTime = document.getElementById('publishTime');
+            const scheduleFields = document.getElementById('scheduleFields');
+            
+            if (publishTime && scheduleFields) {
+                publishTime.addEventListener('change', function() {
+                    if (this.value === 'schedule') {
+                        scheduleFields.style.display = 'block';
+                    } else {
+                        scheduleFields.style.display = 'none';
+                    }
+                });
+            }
+            
+            // Handle form submission
+            vNationForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Validate post type selection
+                const postType = document.getElementById('postType').value;
+                if (!postType) {
+                    alert('Please select a post type');
+                    return;
+                }
+                
+                // Validate required fields based on post type
+                const requiredFields = vNationForm.querySelectorAll('[required]');
+                let isValid = true;
+                
+                requiredFields.forEach(field => {
+                    if (!field.value && field.offsetParent !== null) {
+                        isValid = false;
+                        field.style.borderColor = 'var(--primary-red)';
+                    } else {
+                        field.style.borderColor = '';
+                    }
+                });
+                
+                if (!isValid) {
+                    alert('Please fill in all required fields marked with *');
+                    return;
+                }
+                
+                // Check terms acceptance
+                const termsCheckbox = vNationForm.querySelector('input[name="terms_accepted"]');
+                if (!termsCheckbox.checked) {
+                    alert('You must accept the Community Guidelines to publish to V-Nation');
+                    return;
+                }
+                
+                // Validate character limit for social posts
+                if (postType === 'social_post' && postContent.value.length > 280) {
+                    alert('Social post content exceeds 280 character limit');
+                    postContent.style.borderColor = 'var(--primary-red)';
+                    return;
+                }
+                
+                // In a real application, you would submit the form data to your backend
+                const formData = new FormData(vNationForm);
+                
+                // Simulate API call
+                console.log('V-Nation Post Data:', Object.fromEntries(formData));
+                
+                let successMessage = 'Your content has been published to V-Nation successfully!';
+                if (postType === 'social_page') {
+                    successMessage = 'Your social page has been created successfully!';
+                } else if (postType === 'social_group') {
+                    successMessage = 'Your social group has been created successfully!';
+                }
+                
+                alert(successMessage);
+                window.location.href = './index.html';
+            });
+        }
+    });
+</script>
+
+<style>
+    /* Additional styles for V-Guide form */
+    #vGuideForm select[multiple] {
+        min-height: 100px;
+        padding: 8px;
+    }
+    
+    #vGuideForm small {
+        display: block;
+        color: var(--light-text);
+        margin-top: 4px;
+        font-size: 12px;
+    }
+    
+    #vGuideForm .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-bottom: 1rem;
+    }
+    
+    #vGuideForm .form-section {
+        margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+        #vGuideForm .form-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<script>
+    // Add this to your existing JavaScript in add-post.html
+    
+    // Update the categoryFormMap to include V-Guide
+    // Add this line to your existing categoryFormMap object:
+    // 'v_guide': 'vGuideForm'
+    
+    // V-Guide form specific JavaScript
+    function toggleProfileType() {
+        const profileType = document.getElementById('profileType').value;
+        const personalFields = document.getElementById('personalProfileFields');
+        const entityFields = document.getElementById('entityProfileFields');
+        
+        if (profileType === 'personal') {
+            personalFields.style.display = 'block';
+            entityFields.style.display = 'none';
+            // Set required fields for personal profile
+            setPersonalFieldsRequired(true);
+            setEntityFieldsRequired(false);
+        } else if (profileType === 'entity') {
+            personalFields.style.display = 'none';
+            entityFields.style.display = 'block';
+            // Set required fields for entity profile
+            setPersonalFieldsRequired(false);
+            setEntityFieldsRequired(true);
+        } else {
+            personalFields.style.display = 'none';
+            entityFields.style.display = 'none';
+            setPersonalFieldsRequired(false);
+            setEntityFieldsRequired(false);
+        }
+    }
+    
+    function setPersonalFieldsRequired(required) {
+        const personalFields = document.querySelectorAll('#personalProfileFields [name]');
+        personalFields.forEach(field => {
+            if (field.type !== 'hidden') {
+                field.required = required;
+            }
+        });
+    }
+    
+    function setEntityFieldsRequired(required) {
+        const entityFields = document.querySelectorAll('#entityProfileFields [name]');
+        entityFields.forEach(field => {
+            if (field.type !== 'hidden') {
+                field.required = required;
+            }
+        });
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const vGuideForm = document.getElementById('vGuideForm');
+        
+        if (vGuideForm) {
+            // Initialize profile type toggle
+            toggleProfileType();
+            
+            // Handle form submission
+            vGuideForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Validate profile type selection
+                const profileType = document.getElementById('profileType').value;
+                if (!profileType) {
+                    alert('Please select a profile type');
+                    return;
+                }
+                
+                // Validate required fields based on profile type
+                const requiredFields = vGuideForm.querySelectorAll('[required]');
+                let isValid = true;
+                
+                requiredFields.forEach(field => {
+                    if (!field.value && field.offsetParent !== null) { // Only check visible required fields
+                        isValid = false;
+                        field.style.borderColor = 'var(--primary-red)';
+                    } else {
+                        field.style.borderColor = '';
+                    }
+                });
+                
+                if (!isValid) {
+                    alert('Please fill in all required fields marked with *');
+                    return;
+                }
+                
+                // Check terms acceptance
+                const termsCheckbox = vGuideForm.querySelector('input[name="terms_accepted"]');
+                if (!termsCheckbox.checked) {
+                    alert('You must accept the Terms of Service to create your V-Guide profile');
+                    return;
+                }
+                
+                // Validate email format
+                const emailField = document.getElementById('email');
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (emailField && !emailRegex.test(emailField.value)) {
+                    alert('Please enter a valid email address');
+                    emailField.style.borderColor = 'var(--primary-red)';
+                    return;
+                }
+                
+                // In a real application, you would submit the form data to your backend
+                const formData = new FormData(vGuideForm);
+                
+                // Simulate API call
+                console.log('V-Guide Profile Data:', Object.fromEntries(formData));
+                
+                alert('Your V-Guide profile has been created successfully!');
+                window.location.href = './index.html';
+            });
+            
+            // Real-time validation for years of experience
+            const yearsExperience = document.getElementById('yearsExperience');
+            if (yearsExperience) {
+                yearsExperience.addEventListener('input', function() {
+                    if (this.value < 0) {
+                        this.value = 0;
+                    } else if (this.value > 50) {
+                        this.value = 50;
+                    }
+                });
+            }
+            
+            // Auto-generate professional summary based on inputs
+            const professionalSummary = document.getElementById('professionalSummary');
+            const professionalTitle = document.getElementById('professionalTitle');
+            const specializations = document.getElementById('specializations');
+            
+            if (professionalTitle && professionalSummary) {
+                professionalTitle.addEventListener('blur', updateProfessionalSummary);
+            }
+            
+            function updateProfessionalSummary() {
+                if (professionalTitle && professionalSummary && !professionalSummary.value) {
+                    // Auto-generate a basic summary if empty
+                    const title = professionalTitle.value;
+                    if (title) {
+                        professionalSummary.value = `Experienced ${title} with a strong background in veterinary medicine. Dedicated to providing exceptional care and advancing animal health through professional expertise and continuous learning.`;
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+<style>
+    /* Additional styles for V-College form */
+    #vCollegeForm select[multiple] {
+        min-height: 120px;
+        padding: 8px;
+    }
+    
+    #vCollegeForm small {
+        display: block;
+        color: var(--light-text);
+        margin-top: 4px;
+        font-size: 12px;
+    }
+    
+    #vCollegeForm .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-bottom: 1rem;
+    }
+    
+    #charCount {
+        font-size: 12px;
+        color: var(--light-text);
+        text-align: right;
+    }
+    
+    @media (max-width: 768px) {
+        #vCollegeForm .form-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<script>
+    // Add this to your existing JavaScript in add-post.html
+    
+    // Update the categoryFormMap to include V-College
+    // Add this line to your existing categoryFormMap object:
+    // 'v_college': 'vCollegeForm'
+    
+    // V-College form specific JavaScript
+    document.addEventListener('DOMContentLoaded', function() {
+        const vCollegeForm = document.getElementById('vCollegeForm');
+        
+        if (vCollegeForm) {
+            // Character counter for meta description
+            const metaDescription = document.getElementById('metaDescription');
+            const charCount = document.getElementById('charCount');
+            
+            if (metaDescription && charCount) {
+                metaDescription.addEventListener('input', function() {
+                    const remaining = 160 - this.value.length;
+                    charCount.textContent = `${remaining} characters remaining`;
+                    charCount.style.color = remaining < 0 ? 'var(--primary-red)' : 'var(--light-text)';
+                });
+            }
+            
+            // Handle custom course duration
+            const courseDuration = document.getElementById('courseDuration');
+            if (courseDuration) {
+                courseDuration.addEventListener('change', function() {
+                    if (this.value === 'custom') {
+                        const customDays = prompt('Enter custom access duration in days:');
+                        if (customDays && !isNaN(customDays) && customDays > 0) {
+                            // Create hidden input for custom duration
+                            let hiddenInput = document.querySelector('input[name="custom_duration"]');
+                            if (!hiddenInput) {
+                                hiddenInput = document.createElement('input');
+                                hiddenInput.type = 'hidden';
+                                hiddenInput.name = 'custom_duration';
+                                vCollegeForm.appendChild(hiddenInput);
+                            }
+                            hiddenInput.value = customDays;
+                        } else {
+                            this.value = '365'; // Reset to default
+                        }
+                    }
+                });
+            }
+            
+            // Auto-calculate discount percentage
+            const coursePrice = document.getElementById('coursePrice');
+            const discountPrice = document.getElementById('discountPrice');
+            
+            if (coursePrice && discountPrice) {
+                discountPrice.addEventListener('input', function() {
+                    const price = parseFloat(coursePrice.value) || 0;
+                    const discount = parseFloat(this.value) || 0;
+                    
+                    if (price > 0 && discount > 0 && discount < price) {
+                        const discountPercent = Math.round(((price - discount) / price) * 100);
+                        // You could display this percentage to the user
+                        console.log(`Discount: ${discountPercent}%`);
+                    }
+                });
+            }
+            
+            // Handle form submission
+            vCollegeForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Validate required fields
+                const requiredFields = vCollegeForm.querySelectorAll('[required]');
+                let isValid = true;
+                
+                requiredFields.forEach(field => {
+                    if (!field.value) {
+                        isValid = false;
+                        field.style.borderColor = 'var(--primary-red)';
+                    } else {
+                        field.style.borderColor = '';
+                    }
+                });
+                
+                if (!isValid) {
+                    alert('Please fill in all required fields marked with *');
+                    return;
+                }
+                
+                // Check terms acceptance
+                const termsCheckbox = vCollegeForm.querySelector('input[name="terms_accepted"]');
+                const contentCheckbox = vCollegeForm.querySelector('input[name="content_original"]');
+                
+                if (!termsCheckbox.checked || !contentCheckbox.checked) {
+                    alert('You must accept all terms and confirm content originality to publish your course');
+                    return;
+                }
+                
+                // Validate course hours and lectures
+                const totalHours = parseInt(document.getElementById('totalHours').value) || 0;
+                const lecturesCount = parseInt(document.getElementById('lecturesCount').value) || 0;
+                
+                if (totalHours < 1 || lecturesCount < 1) {
+                    alert('Please enter valid numbers for course hours and lectures count');
+                    return;
+                }
+                
+                // In a real application, you would submit the form data to your backend
+                const formData = new FormData(vCollegeForm);
+                
+                // Simulate API call
+                console.log('V-College Course Data:', Object.fromEntries(formData));
+                
+                alert('Your V-College course has been published successfully!');
+                window.location.href = './index.html';
+            });
+        }
+    });
+</script>
+
+<style>
+    /* Additional styles for V-Experts form */
+    #vExpertsForm select[multiple] {
+        min-height: 100px;
+        padding: 8px;
+    }
+    
+    #vExpertsForm small {
+        display: block;
+        color: var(--light-text);
+        margin-top: 4px;
+        font-size: 12px;
+    }
+    
+    #vExpertsForm .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-bottom: 1rem;
+    }
+    
+    @media (max-width: 768px) {
+        #vExpertsForm .form-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<script>
+    // Add this to your existing JavaScript in add-post.html
+    
+    // Update the categoryFormMap to include V-Experts
+    // Add this line to your existing categoryFormMap object:
+    // 'v_experts': 'vExpertsForm'
+    
+    // V-Experts form specific JavaScript
+    document.addEventListener('DOMContentLoaded', function() {
+        const vExpertsForm = document.getElementById('vExpertsForm');
+        
+        if (vExpertsForm) {
+            // Handle form submission
+            vExpertsForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Validate required fields
+                const requiredFields = vExpertsForm.querySelectorAll('[required]');
+                let isValid = true;
+                
+                requiredFields.forEach(field => {
+                    if (!field.value) {
+                        isValid = false;
+                        field.style.borderColor = 'var(--primary-red)';
+                    } else {
+                        field.style.borderColor = '';
+                    }
+                });
+                
+                if (!isValid) {
+                    alert('Please fill in all required fields marked with *');
+                    return;
+                }
+                
+                // Check terms acceptance
+                const termsCheckbox = vExpertsForm.querySelector('input[name="terms_accepted"]');
+                if (!termsCheckbox.checked) {
+                    alert('You must accept the Terms of Service to publish your consultation');
+                    return;
+                }
+                
+                // In a real application, you would submit the form data to your backend
+                const formData = new FormData(vExpertsForm);
+                
+                // Simulate API call
+                console.log('V-Experts Consultation Data:', Object.fromEntries(formData));
+                
+                alert('Your V-Experts consultation has been published successfully!');
+                window.location.href = './index.html';
+            });
+            
+            // Real-time validation for price field
+            const priceField = document.getElementById('consultationPrice');
+            if (priceField) {
+                priceField.addEventListener('input', function() {
+                    if (this.value < 0) {
+                        this.value = 0;
+                    }
+                });
+            }
+            
+            // Handle custom duration selection
+            const durationSelect = document.getElementById('consultationDuration');
+            if (durationSelect) {
+                durationSelect.addEventListener('change', function() {
+                    if (this.value === 'custom') {
+                        const customDuration = prompt('Enter custom duration in minutes:');
+                        if (customDuration && !isNaN(customDuration) && customDuration > 0) {
+                            // You could create a hidden input field for custom duration
+                            console.log('Custom duration:', customDuration + ' minutes');
+                        } else {
+                            this.value = '60'; // Reset to default
+                        }
+                    }
+                });
+            }
+        }
+    });
+</script>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>V-Verse</h3>
+                    <p>Comprehensive veterinary platform designed to help veterinary professionals connect, share knowledge, and grow together.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Services</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <ul class="footer-links">
+                        <li>Email: support@vverse.com</li>
+                        <li>Phone: +1 (555) 123-4567</li>
+                        <li>Address: 123 Vet Street, Animal City</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2025 V-Verse. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+<script>
+    // Utility function to format time
+function formatTime(timestamp) {
+    // Handle cases where timestamp might be null or undefined
+    if (!timestamp) return 'Time unknown';
+    try {
+        const date = new Date(timestamp);
+        // Ensure the date is valid before attempting formatting
+        if (isNaN(date)) return 'Invalid Date';
+        return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    } catch (e) {
+        return 'Date error';
+    }
+}
+
+// Function to create individual post elements
+function createPostElement(post) {
+    const postDiv = document.createElement('div');
+    postDiv.className = 'post-item';
+    postDiv.innerHTML = `
+        <div class="post-header">
+            <!-- Ensure fallbacks for images -->
+            <img src="${post.profile_image || 'default-avatar.png'}" alt="${post.user_name}" class="user-avatar" onerror="this.onerror=null; this.src='default-avatar.png';">
+            <div class="user-info">
+                <h4>${post.user_name}</h4>
+                <span class="post-time">${formatTime(post.created_at)}</span>
+            </div>
+        </div>
+        <div class="post-content">
+            ${post.title ? `<h3>${post.title}</h3>` : ''}
+            ${post.description ? `<p>${post.description}</p>` : ''}
+            ${post.content ? `<p>${post.content}</p>` : ''}
+            ${post.image_path ? `<img src="${post.image_path}" alt="Post image" class="post-image" onerror="this.style.display='none';">` : ''}
+            ${post.video_path ? `
+                <video controls class="post-video">
+                    <source src="${post.video_path}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            ` : ''}
+            ${post.event_date ? `<p><strong>Event Date:</strong> ${formatTime(post.event_date)}</p>` : ''}
+            ${post.location ? `<p><strong>Location:</strong> ${post.location}</p>` : ''}
+            ${post.price !== undefined ? `<p><strong>Price:</strong> $${post.price}</p>` : ''}
+        </div>
+        <div class="post-actions">
+            <button class="like-btn" onclick="likePost('${post.id}')">
+                <i class="fas fa-heart"></i> ${post.like_count || 0}
+            </button>
+            <button class="comment-btn" onclick="toggleComments('${post.id}')">
+                <i class="fas fa-comment"></i> ${post.comment_count || 0}
+            </button>
+        </div>
+        <div class="comments-section" id="comments-${post.id}" style="display: none;">
+            <div class="comments-list" id="comments-list-${post.id}"></div>
+            <div class="add-comment">
+                <input type="text" id="comment-input-${post.id}" placeholder="Add a comment...">
+                <button onclick="addComment('${post.id}')">Post</button>
+            </div>
+        </div>
+    `;
+    
+    return postDiv;
+}
+
+// Function to display posts in the UI
+function displayPosts(posts) {
+    const postsContainer = document.getElementById('postsContainer');
+    if (!postsContainer) return;
+    
+    postsContainer.innerHTML = '';
+    
+    posts.forEach(post => {
+        const postElement = createPostElement(post);
+        postsContainer.appendChild(postElement);
+    });
+}
+
+/**
+ * ASYNC: Utility function to load posts
+ * Uses async/await for fetching posts from the API.
+ */
+async function loadPosts(type = '', category = '') {
+    let url = '/backend/index/posts.php';
+    const params = new URLSearchParams();
+    
+    if (type) params.append('type', type);
+    if (category) params.append('category', category);
+    
+    if (params.toString()) {
+        url += '?' + params.toString();
+    }
+    
+    try {
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            displayPosts(data.data);
+        } else {
+            console.error('Failed to load posts (API response not success):', data.message);
+        }
+    } catch (error) {
+        console.error('Error loading posts:', error);
+    }
+}
+
+/**
+ * ASYNC: Like post function
+ * Uses async/await for submitting a like/unlike action.
+ */
+async function likePost(postId) {
+    try {
+        const response = await fetch('/api/likes.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ post_id: postId, action: 'like' })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            const likeBtn = document.querySelector(`.post-actions button.like-btn[onclick*="likePost('${postId}')"]`);
+            
+            if (likeBtn) {
+                // Assuming the API returns the new total count in data.new_like_count
+                const currentCount = parseInt(likeBtn.textContent.match(/\d+/)?.[0] || '0');
+                const newCount = data.new_like_count !== undefined 
+                    ? data.new_like_count 
+                    : (data.liked ? currentCount + 1 : Math.max(0, currentCount - 1));
+                
+                // Update the button's content with the new count
+                likeBtn.innerHTML = `<i class="fas fa-heart"></i> ${newCount}`;
+            }
+        }
+    } catch (error) {
+        console.error('Error liking post:', error);
+    }
+}
+
+// Toggle comments function
+function toggleComments(postId) {
+    const commentsSection = document.getElementById(`comments-${postId}`);
+    if (commentsSection) {
+        if (commentsSection.style.display === 'none' || commentsSection.style.display === '') {
+            commentsSection.style.display = 'block';
+            loadComments(postId);
+        } else {
+            commentsSection.style.display = 'none';
+        }
+    }
+}
+
+/**
+ * ASYNC: Load comments function
+ * Uses async/await for fetching comments.
+ */
+async function loadComments(postId) {
+    try {
+        const response = await fetch(`/api/comments.php?post_id=${postId}`);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            const commentsList = document.getElementById(`comments-list-${postId}`);
+            if (commentsList) {
+                commentsList.innerHTML = '';
+                
+                data.data.forEach(comment => {
+                    const commentElement = document.createElement('div');
+                    commentElement.className = 'comment';
+                    commentElement.innerHTML = `
+                        <strong>${comment.user_name}:</strong> ${comment.text}
+                        <span class="comment-time">${formatTime(comment.created_at)}</span>
+                    `;
+                    commentsList.appendChild(commentElement);
+                });
+            }
+        }
+    } catch (error) {
+        console.error('Error loading comments:', error);
+    }
+}
+
+/**
+ * ASYNC: Add comment function
+ * Uses async/await for submitting a new comment.
+ */
+async function addComment(postId) {
+    const commentInput = document.getElementById(`comment-input-${postId}`);
+    const commentText = commentInput ? commentInput.value.trim() : '';
+    
+    if (!commentText) return;
+    
+    try {
+        const response = await fetch('/api/comments.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ post_id: postId, text: commentText })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            if (commentInput) commentInput.value = '';
+
+            // Find and update the comment count in the UI
+            const commentBtn = document.querySelector(`.post-actions button.comment-btn[onclick*="toggleComments('${postId}')"]`);
+            if (commentBtn) {
+                const currentCount = parseInt(commentBtn.textContent.match(/\d+/)?.[0] || '0');
+                commentBtn.innerHTML = `<i class="fas fa-comment"></i> ${currentCount + 1}`;
+            }
+
+            // Reload comments to display the new one immediately
+            await loadComments(postId);
+        }
+    } catch (error) {
+        console.error('Error adding comment:', error);
+    }
+}
+
+
+// Document Ready Initialization
+document.addEventListener('DOMContentLoaded', function() {
+    // Form elements
+    const photoForm = document.getElementById('photoForm');
+    const videoForm = document.getElementById('videoForm');
+    const eventForm = document.getElementById('eventForm');
+    const jobsForm = document.getElementById('jobsForm');
+    const articleForm = document.getElementById('articleForm');
+    const webinarForm = document.getElementById('webinarForm');
+    
+    // Back button
+    const backButton = document.getElementById('backStep2');
+    
+    // Webinar type toggle
+    const webinarTypeSelect = document.getElementById('webinarType');
+    const videoUploadGroup = document.getElementById('videoUploadGroup');
+
+    // Webinar type change handler
+    if (webinarTypeSelect && videoUploadGroup) {
+        webinarTypeSelect.addEventListener('change', function() {
+            const videoInput = document.getElementById('webinarVideo');
+            if (this.value === 'recorded') {
+                videoUploadGroup.style.display = 'block';
+                if (videoInput) videoInput.setAttribute('required', 'required');
+            } else {
+                videoUploadGroup.style.display = 'none';
+                if (videoInput) videoInput.removeAttribute('required');
+            }
+        });
+    }
+
+    // Back button handler
+    if (backButton) {
+        backButton.addEventListener('click', function() {
+            // Navigate back to post type selection (implementation assumes a multi-step form flow)
+            window.history.back();
+        });
+    }
+
+    /**
+     * ASYNC: Generic form submission handler
+     * Uses async/await for form submission.
+     */
+    function handleFormSubmit(form, postType) {
+        return async function(e) { // Refactored to async function
+            e.preventDefault();
+            
+            const formData = new FormData(form);
+            formData.append('post_type', postType);
+            
+            // Show loading state
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn ? submitBtn.textContent : 'Submit';
+            if (submitBtn) {
+                submitBtn.textContent = 'Posting...';
+                submitBtn.disabled = true;
+            }
+
+            try {
+                const response = await fetch('backend/index/postupload.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                // Check for HTTP errors (e.g., 404, 500)
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    console.log('Post created successfully!');
+                    form.reset();
+                    // Redirect to posts page or clear form
+                    window.location.href = './index.php';
+                } else {
+                    // Handle application-level failure response (e.g., status !== 'success')
+                    throw new Error(data.message || 'Failed to create post');
+                }
+            } catch (error) {
+                console.error('Error creating post:', error.message);
+            } finally {
+                // Hide loading state
+                if (submitBtn) {
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                }
+            }
+        };
+    }
+
+    // Attach event listeners to forms
+    if (photoForm) {
+        photoForm.addEventListener('submit', handleFormSubmit(photoForm, 'photo'));
+    }
+    
+    if (videoForm) {
+        videoForm.addEventListener('submit', handleFormSubmit(videoForm, 'video'));
+    }
+    
+    if (eventForm) {
+        eventForm.addEventListener('submit', handleFormSubmit(eventForm, 'event'));
+    }
+    
+    if (jobsForm) {
+        jobsForm.addEventListener('submit', handleFormSubmit(jobsForm, 'job'));
+    }
+    
+    if (articleForm) {
+        articleForm.addEventListener('submit', handleFormSubmit(articleForm, 'article'));
+    }
+    
+    if (webinarForm) {
+        webinarForm.addEventListener('submit', handleFormSubmit(webinarForm, 'webinar'));
+    }
+
+    // File preview functionality
+    function setupFilePreview(inputId, previewId) {
+        const fileInput = document.getElementById(inputId);
+        const preview = document.getElementById(previewId);
+        
+        if (fileInput && preview) {
+            fileInput.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    preview.style.display = 'none';
+                }
+            });
+        }
+    }
+
+    // Setup file previews
+    setupFilePreview('postImage', 'imagePreview');
+    setupFilePreview('articleImage', 'articleImagePreview');
+    setupFilePreview('job_image', 'jobImagePreview');
+    setupFilePreview('webinarThumbnail', 'webinarThumbnailPreview');
+    
+    // Initialize posts loading when page loads
+    loadPosts();
+});
+
+</script>
+
+    <script>
+        // Category to form mapping
+        const categoryFormMap = {
+            'v_guide': 'vGuideForm',
+            'v_blog': 'photoForm',
+            'v_nation': 'photoForm',
+            'v_tube': 'videoForm',
+            'v_jobs': 'jobsForm',
+            'v_lance': 'jobsForm',
+            'v_college': 'vCollegeForm',
+            'v_market': 'productForm',
+            'v_events': 'eventForm',
+            'v_webinars': 'webinarForm',
+            'v_experts': 'vExpertsForm',
+            'v_buzz': 'photoForm',
+            'v_cast': 'videoForm',
+            'v_books': 'booksForm',
+            'v_support': 'photoForm'
+        };
+        
+        // Category to display name mapping
+        const categoryNameMap = {
+            'v_guide': 'V-Guide',
+            'v_blog': 'V-Blog',
+            'v_nation': 'V-Nation',
+            'v_tube': 'V-Tube',
+            'v_jobs': 'V-Jobs',
+            'v_lance': 'V-Lance',
+            'v_college': 'V-College',
+            'v_market': 'V-Market',
+            'v_events': 'V-Events',
+            'v_webinars': 'V-Webinars',
+            'v_experts': 'V-Experts',
+            'v_buzz': 'V-Buzz',
+            'v_cast': 'V-Cast',
+            'v_books': 'V-Books',
+            'v_support': 'V-Support'
+        };
+        
+        let selectedCategory = null;
+        
+        // Category selection
+        document.querySelectorAll('.category-card').forEach(card => {
+            card.addEventListener('click', function() {
+                // Remove selected class from all cards
+                document.querySelectorAll('.category-card').forEach(c => {
+                    c.classList.remove('selected');
+                });
+                
+                // Add selected class to clicked card
+                this.classList.add('selected');
+                
+                // Enable next button
+                document.getElementById('nextStep1').disabled = false;
+                
+                // Store selected category
+                selectedCategory = this.getAttribute('data-category');
+            });
+        });
+        
+        // Next button step 1
+        document.getElementById('nextStep1').addEventListener('click', function() {
+            if (selectedCategory) {
+                // Update progress steps
+                document.querySelectorAll('.step')[0].classList.remove('active');
+                document.querySelectorAll('.step')[1].classList.add('active');
+                
+                // Hide step 1, show step 2
+                document.getElementById('step1').classList.remove('active');
+                document.getElementById('step2').classList.add('active');
+                
+                // Update step 2 title
+                document.getElementById('step2Title').textContent = `Create ${categoryNameMap[selectedCategory]} Post`;
+                
+                // Hide all forms
+                document.querySelectorAll('#step2 form').forEach(form => {
+                    form.style.display = 'none';
+                });
+                
+                // Show the appropriate form
+                const formId = categoryFormMap[selectedCategory];
+                document.getElementById(formId).style.display = 'block';
+                
+                // Set category value in form
+                document.querySelectorAll('.category-input').forEach(input => {
+                    input.value = selectedCategory;
+                });
+            }
+        });
+        
+        // Back button step 2
+        document.querySelectorAll('#backStep2').forEach(button => {
+            button.addEventListener('click', function() {
+                // Update progress steps
+                document.querySelectorAll('.step')[1].classList.remove('active');
+                document.querySelectorAll('.step')[0].classList.add('active');
+                
+                // Hide step 2, show step 1
+                document.getElementById('step2').classList.remove('active');
+                document.getElementById('step1').classList.add('active');
+                
+                // Hide all forms in step 2
+                document.querySelectorAll('#step2 form').forEach(form => {
+                    form.style.display = 'none';
+                });
+            });
+        });
+        
+        // Webinar type change handler
+        document.getElementById('webinarType').addEventListener('change', function() {
+            const videoUploadGroup = document.getElementById('videoUploadGroup');
+            if (this.value === 'recorded') {
+                videoUploadGroup.style.display = 'block';
+            } else {
+                videoUploadGroup.style.display = 'none';
+            }
+        });
+        
+        // Form submission handlers
+        document.querySelectorAll('#step2 form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                // In a real application, you would submit the form data to your backend
+                alert('Post created successfully!');
+                window.location.href = './index.html';
+            });
+        });
+    </script>
+</body>
+</html>

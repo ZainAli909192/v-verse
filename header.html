@@ -1,0 +1,291 @@
+    <!-- Header -->
+<header class="v-header">
+    <div class="left-section">
+        <img src="../img/logo.jpg" class="v-logo" alt="V Logo">
+  
+        <div class="search-box ">
+            <input type="text" placeholder="Search for vets, clinics, or topics...">
+            <button><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+    </div>
+ <!-- NAVIGATION -->
+    <nav class="v-nav nav-links">
+
+        <!-- HOME -->
+        <a href="../" class="nav-item active">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+
+        <!-- ADD POST (your JS kept intact) -->
+        <a href="../add-post.html" class="nav-item">
+            <i class="fas fa-plus-circle"></i>
+            <span>Add post</span>
+        </a>
+
+        <!-- MESSAGES (your badge class kept) -->
+        <a href="#" class="nav-item mesgs">
+            <div class="message-icon-wrapper">
+                <i class="fas fa-comment-dots"></i>
+                <span class="message-badge">0</span>
+            </div>
+            <span>Messages</span>
+        </a>
+
+        <!-- NOTIFICATIONS (badge kept + screenshot style badge) -->
+        <a href="#" class="nav-item notification" id="not">
+            <div class="notification-icon-wrapper">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge badge">3</span>
+            </div>
+            <span>Notifications</span>
+        </a>
+
+        <!-- PROFILE -->
+        <a href="#" class="nav-item profile-toggle profile" data-profile-toggle>
+            <i class="fas fa-user-circle"></i>
+            <span>Profile</span>
+        </a>
+
+        <!-- POINTS -->
+        <a href="#" class="nav-item profile-toggle profile">
+            <i class="fas fa-money-bill"></i>
+            <span>Points</span>
+        </a>
+
+        <!-- POST JOB -->
+        <!-- <a href="./post-job.html" class="nav-item">
+            <i class="fas fa-plus-circle"></i>
+            <span>Post job</span>
+        </a> -->
+
+        <!-- LOGOUT (your ID + onclick preserved) -->
+        <a href="#" 
+           class="nav-item logout" 
+           onclick="setupLogout()" 
+           id="logoutButton" 
+           data-section="logout">
+           <i class="fas fa-sign-out-alt"></i>
+           <span>Logout</span>
+        </a>
+
+    </nav>
+</header>
+
+ <!-- messages  -->
+        <!-- Add this after your existing nav-item -->
+        <div class="messages-container">
+            <div class="messages-header">
+                <div class="header-left">
+                    <h3>Messages</h3>
+                    <button class="icon-btn"><i class="fas fa-arrow-left"></i></button>
+
+                </div>
+                <div class="header-right">
+                    <button class="icon-btn minimize-btn"><i class="fas  fa-angle-down"></i></button>
+                    <button class="icon-btn maximize-btn"><i class="fas fa-angle-up"></i></button>
+                    <button class="icon-btn close-btn"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+
+            <div class="conversation-list">
+                <div class="conversation active">
+                    <div class="avatar">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Dr. Michael Chen">
+                    </div>
+                    <div class="conversation-details">
+                        <div class="conversation-header">
+                            <span class="name">Dr. Michael Chen</span>
+                            <span class="time">1d</span>
+                        </div>
+                        <p class="last-message">Just sent you the research paper...</p>
+                    </div>
+                </div>
+
+                <div class="conversation">
+                    <div class="avatar">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Dr. Sarah Johnson">
+                    </div>
+                    <div class="conversation-details">
+                        <div class="conversation-header">
+                            <span class="name">Dr. Sarah Johnson</span>
+                            <span class="time">3d</span>
+                        </div>
+                        <p class="last-message">Are you attending the conference?</p>
+                    </div>
+                </div>
+
+
+                <!-- More conversations would go here -->
+            </div>
+
+            <div class="message-view">
+                <div class="message-header">
+                    <div class="recipient-info">
+                        <div class="avatar">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Dr. Michael Chen">
+                        </div>
+                        <div>
+                            <h4>Dr. Michael Chen</h4>
+                            <p>Veterinary Cardiologist</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="message-history">
+                    <div class="message received">
+                        <p>Hi there! I just published that research paper we discussed.</p>
+                        <span class="time">10:30 AM</span>
+                    </div>
+
+                    <div class="message sent">
+                        <p>That's great! Can you send me a copy?</p>
+                        <span class="time">10:32 AM</span>
+                    </div>
+
+                    <div class="message received">
+                        <p>Just sent you the research paper via email. Let me know your thoughts!</p>
+                        <span class="time">1d</span>
+                    </div>
+                </div>
+
+                <div class="message-input">
+                    <input type="text" placeholder="Write a message...">
+                    <button class="send-btn"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+
+  <!-- Notifications Container -->
+    <div class="notifications-container">
+        <div class="notifications-header">
+            <h3>Notifications</h3>
+            <div class="header-right">
+                <button class="icon-btn close-btn"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+    
+        <div class="notifications-list">
+            <!-- Unread Notifications Section -->
+            <div class="notifications-section">
+                <h4 class="section-title">New</h4>
+                <div class="notification unread">
+                    <div class="notification-avatar">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Dr. Michael Chen">
+                    </div>
+                    <div class="notification-content">
+                        <p class="notification-text"><strong>Dr. Michael Chen</strong> mentioned you in a comment:
+                            "Your analysis was spot on..."</p>
+                        <span class="notification-time">2m ago</span>
+                    </div>
+                </div>
+                <div class="notification unread">
+                    <div class="notification-avatar">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Dr. Sarah Johnson">
+                    </div>
+                    <div class="notification-content">
+                        <p class="notification-text"><strong>Dr. Sarah Johnson</strong> liked your post about feline
+                            cardiology</p>
+                        <span class="notification-time">15m ago</span>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Read Notifications Section -->
+            <div class="notifications-section">
+                <h4 class="section-title">Earlier</h4>
+                <div class="notification">
+                    <div class="notification-avatar">
+                        <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="Dr. James Wilson">
+                    </div>
+                    <div class="notification-content">
+                        <p class="notification-text"><strong>Dr. James Wilson</strong> shared a new research paper
+                        </p>
+                        <span class="notification-time">1h ago</span>
+                    </div>
+                </div>
+                <div class="notification">
+                    <div class="notification-avatar">
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Dr. Emily Brown">
+                    </div>
+                    <div class="notification-content">
+                        <p class="notification-text"><strong>Veterinary Association</strong> posted about upcoming
+                            conference</p>
+                        <span class="notification-time">3h ago</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Notification Detail View (hidden by default) -->
+        <div class="notification-detail">
+            <div class="detail-header">
+                <button class="back-btn-notification"><i class="fas fa-arrow-left"></i></button>
+                <h4>Notification</h4>
+            </div>
+            <div class="detail-content">
+                <!-- Content will be loaded dynamically -->
+            </div>
+        </div>
+    </div>
+
+
+<div class="profile-dropdown">
+    <div class="profile-header">
+        <div class="profile-avatar">
+            <img id="profileAvatarImg" src="../img/logo.jpg" alt="Profile Picture">
+        </div>
+        <div class="profile-info">
+            <h4 id="profileUserName">Dr. Sarah Johnson</h4>
+            <p id="profileUserTitle">Veterinary Surgeon • New York</p>
+        </div>
+    </div>
+    
+    <div class="dropdown-section"  >
+        <a href="./edit-profile.html" class="dropdown-item">
+            <i class="fas fa-user-edit"></i>
+            <span>Edit Profile</span>
+        </a>
+        <a href="profile.html" class="dropdown-item" >
+            <i class="fas fa-eye"></i>      
+            <span>View Profile</span>
+        </a>
+        <a href="#" class="dropdown-item">
+            <i class="fas fa-cog"></i>
+            <span>Settings & Privacy</span>
+        </a>
+        <!-- <div class="dropdown-item language-selector">
+            <i class="fas fa-language"></i>
+            <span>Language</span>
+            <div class="language-dropdown">
+                <a href="#" class="language-option" data-lang="en">
+                    <span>English</span>
+                    <i class="fas fa-check" style="display: none;"></i>
+                </a>
+                <a href="#" class="language-option" data-lang="ar">
+                    <span>العربية</span>
+                    <i class="fas fa-check" style="display: none;"></i>
+                </a>
+            </div>
+        </div> -->
+    <!-- <a href="#" class="dropdown-item">
+            <i class="fas fa-users"></i>
+            <span>Groups</span>
+        </a> -->
+        <!-- <a href="#" class="dropdown-item">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Events</span>
+        </a> -->
+        <a href="#" class="dropdown-item">
+            <i class="fas fa-coins"></i>
+            <span>Points</span>
+        </a>
+    </div>
+    
+    <div class="dropdown-section">
+        <a href="#" class="dropdown-item">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </a>
+    </div>
+</div>
