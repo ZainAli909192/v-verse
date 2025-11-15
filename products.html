@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-Market | Modern E-commerce Frontend</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Font: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --header-gradient: linear-gradient(to right, #2563eb, #ef4444);
+            --button-gradient: linear-gradient(to right, #2563eb, #ef4444);
+            --product-card-bg: #ffffff;
+            --text-color: #334155;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: var(--text-color);
+        }
+
+        /* Custom Header Gradient based on the image */
+        .header-bg {
+            background: var(--header-gradient);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Custom Buy Now Button (Primary Action) */
+        .btn-buy {
+            background: var(--button-gradient);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-buy:hover {
+            box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.3), 0 4px 6px -2px rgba(37, 99, 235, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        /* Custom Add to Cart Button (Secondary Action) */
+        .btn-cart {
+            background-color: #e0e1e2; /* Light gray background */
+            color: #334155; /* Dark text color */
+            border: 1px solid #d1d5db;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cart:hover {
+            background-color: #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+        }
+
+        /* Hero Slider Styling */
+        .slider-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .slider-wrapper {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            width: 400%; /* 4 slides * 100% */
+        }
+
+        .slide {
+            width: 25%; /* Each slide takes up 1/4 of the wrapper */
+            flex-shrink: 0;
+            height: 400px; /* Default height for desktop */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #e0e7ff; /* Fallback color */
+        }
+        
+        /* Specific Slide Styling: Using user-provided online images */
+        .slide-1 { 
+            background-image: url('https://images.unsplash.com/photo-1589924691995-400dc9ecc119?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGV0JTIwZm9vZHxlbnwwfHwwfHx8MA%3D%3D');
+        }
+        .slide-2 { 
+            background-image: url('https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGV0JTIwY2FycmllcnxlbnwwfHwwfHx8MA%3D%3D'); 
+        }
+        .slide-3 { 
+            background-image: url('https://images.unsplash.com/photo-1631511231050-24f8dba10537?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHByb2Zlc3Npb25hbCUyMCUyMGdyb29taW5nJTIwa2l0JTIwZm9yJTIwcGV0c3xlbnwwfHwwfHx8MA%3D%3D');
+        }
+        .slide-4 { 
+            background-image: url('https://images.unsplash.com/photo-1577610841715-851f4336e9e5?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OTR8fHNob3BwaW5nJTIwcGV0c3xlbnwwfHwwfHx8MA%3D%3D');
+        }
+
+        /* Slider Indicators */
+        .slider-indicators {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
+            z-index: 10;
+        }
+
+        .indicator {
+            width: 10px;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.7); /* Slightly more visible on pure image */
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Shadow for visibility */
+        }
+
+        .indicator.active {
+            background-color: white;
+            transform: scale(1.2);
+        }
+
+        /* Category Tabs */
+        .category-tabs {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+            gap: 0.5rem;
+        }
+
+        .category-tab {
+            padding: 0.75rem 1.5rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background-color: #f1f5f9;
+            color: #64748b;
+            border: 2px solid transparent;
+        }
+
+        .category-tab.active {
+            background: var(--button-gradient);
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-tab:hover:not(.active) {
+            background-color: #e2e8f0;
+            border-color: #cbd5e1;
+        }
+
+        /* Filter Sidebar */
+        .filter-sidebar {
+            background-color: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+            position: sticky;
+            top: 1rem;
+        }
+
+        .filter-section {
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 1.5rem;
+        }
+
+        .filter-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .filter-title {
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .filter-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .filter-option input[type="checkbox"] {
+            accent-color: #2563eb;
+        }
+
+        .price-range {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .price-inputs {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .price-inputs input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+        }
+
+        .price-slider {
+            width: 100%;
+            height: 5px;
+            background-color: #e2e8f0;
+            border-radius: 5px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .price-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--button-gradient);
+            cursor: pointer;
+        }
+
+        .price-slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--button-gradient);
+            cursor: pointer;
+            border: none;
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 0.25rem;
+            color: #fbbf24;
+        }
+
+        .clear-filters {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #f1f5f9;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .clear-filters:hover {
+            background-color: #e2e8f0;
+        }
+
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 1rem;
+        }
+
+        .product-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-price {
+            font-weight: 700;
+            color: #ef4444;
+            margin-bottom: 1rem;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .product-actions button {
+            flex: 1;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        /* Responsive adjustments for slider height */
+        @media (max-width: 768px) {
+            .slide {
+                height: 300px; /* Shorter height for mobile */
+            }
+            
+            .category-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .category-tab {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header/Navbar -->
+    <header class="header-bg p-4 sticky top-0 z-50">
+        <div class="container mx-auto flex flex-wrap items-center justify-between">
+            
+            <!-- V-Market Text (Top Left) -->
+            <div class="text-3xl font-extrabold text-white mr-4 order-1">
+                V-Markeplace
+            </div>
+
+            <!-- Search Bar: Full width on mobile, centered and large on desktop -->
+            <div class="flex flex-grow w-full md:w-auto max-w-full md:max-w-lg mx-0 md:mx-auto order-3 md:order-2 mt-2 md:mt-0">
+                <input type="text" placeholder="Search for products..." class="w-full p-2.5 rounded-l-lg border-none focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-700" />
+                <!-- Search Button color adjusted to match gradient look slightly -->
+                <button class="px-4 py-2 bg-white text-gray-800 rounded-r-lg hover:bg-gray-200 transition-colors">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+
+            <!-- Navigation Icons: Always visible, pushed to the right on all screens -->
+            <nav class="flex items-center space-x-3 text-white text-xl ml-auto md:ml-0 order-2 md:order-3">
+                <!-- Profile Icon (Always visible) -->
+                <a href="./index.html" class="p-2 rounded-full hover:bg-white hover:text-blue-600 transition-colors" title="Home"><i class="fas fa-home"></i></a>
+                
+                <!-- Cart Icon (Always visible) -->
+                <a href="./seller/cart.html" class="p-2 rounded-full hover:bg-white hover:text-blue-600 transition-colors relative" title="Cart">
+                    <i class="fas fa-shopping-cart"></i>
+                    <!-- Placeholder count for items in cart -->
+                    <span class="cart-badge absolute top-0 right-0 bg-red-500 text-xs text-white rounded-full h-4 w-4 flex items-center justify-center -mt-1 -mr-1" style="display: none;">0</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="container mx-auto p-4 md:p-8">
+        
+        <!-- Hero Section - Product Slider (Image Only) -->
+        
+
+        <!-- Category Tabs -->
+        <section class="mb-8">
+            <div class="category-tabs">
+                <div class="category-tab active" data-category="products">Products</div>
+                <div class="category-tab" data-category="books">Books</div>
+                <div class="category-tab" data-category="courses">Courses</div>
+            </div>
+        </section>
+
+        <!-- Product Listing Section with Filters -->
+        <section class="mb-12">
+            <div class="flex flex-col md:flex-row gap-8">
+                <!-- Filter Sidebar -->
+                <div class="w-full md:w-1/4">
+                    <div class="filter-sidebar">
+                        <h3 class="text-xl font-bold mb-4">Filters</h3>
+                        
+                        <!-- Price Range Filter -->
+                        <div class="filter-section">
+                            <div class="filter-title">
+                                <span>Price Range</span>
+                            </div>
+                            <div class="price-range">
+                                <div class="price-inputs">
+                                    <input type="number" id="min-price" placeholder="Min" value="0">
+                                    <input type="number" id="max-price" placeholder="Max" value="200">
+                                </div>
+                                <input type="range" min="0" max="200" value="200" class="price-slider" id="price-slider">
+                                <div class="flex justify-between text-sm text-gray-500">
+                                    <span>$0</span>
+                                    <span>$200</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Category Filter -->
+                        <div class="filter-section">
+                            <div class="filter-title">
+                                <span>Category</span>
+                            </div>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="category" value="food" checked>
+                                    <span>Pet Food</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="category" value="toys" checked>
+                                    <span>Toys</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="category" value="accessories" checked>
+                                    <span>Accessories</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="category" value="health" checked>
+                                    <span>Health & Care</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- Brand Filter -->
+                        <div class="filter-section">
+                            <div class="filter-title">
+                                <span>Brand</span>
+                            </div>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="brand" value="premium" checked>
+                                    <span>Premium Pet</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="brand" value="natural" checked>
+                                    <span>Natural Choice</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="brand" value="paws" checked>
+                                    <span>Happy Paws</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="brand" value="veterinary" checked>
+                                    <span>Veterinary Pro</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- Rating Filter -->
+                        <div class="filter-section">
+                            <div class="filter-title">
+                                <span>Customer Rating</span>
+                            </div>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="rating" value="5">
+                                    <div class="rating-stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <span class="ml-1 text-gray-600">(4.5 & up)</span>
+                                    </div>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="rating" value="4">
+                                    <div class="rating-stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                        <span class="ml-1 text-gray-600">(4.0 & up)</span>
+                                    </div>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="rating" value="3">
+                                    <div class="rating-stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                        <span class="ml-1 text-gray-600">(3.0 & up)</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- Seller Filter -->
+                        <div class="filter-section">
+                            <div class="filter-title">
+                                <span>Seller</span>
+                            </div>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="seller" value="verified" checked>
+                                    <span>Verified Sellers</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="seller" value="premium" checked>
+                                    <span>Premium Sellers</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <button class="clear-filters mt-4">
+                            Clear All Filters
+                        </button>
+                    </div>
+                </div>
+                
+              <!-- Product Grid -->
+<div class="w-full md:w-3/4">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold">Featured Products</h2>
+        <div class="flex items-center gap-2">
+            <span class="text-gray-600">Sort by:</span>
+            <select class="border border-gray-300 rounded-lg p-2">
+                <option>Popularity</option>
+                <option>Price: Low to High</option>
+                <option>Price: High to Low</option>
+                <option>Customer Rating</option>
+                <option>Newest First</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="product-grid" id="product-grid">
+        <!-- Product Card 1 - Premium Pet Food -->
+        <div class="product-card">
+            <img src="https://images.unsplash.com/photo-1589924691995-400dc9ecc119?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGV0JTIwZm9vZHxlbnwwfHwwfHx8MA%3D%3D"
+                 alt="Premium Dog Food" class="product-image">
+            <div class="product-info">
+                <h3 class="product-title">Premium Dry Dog Food</h3>
+                <p class="product-price">$45.99</p>
+                <div class="product-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                    <span class="text-gray-600 text-sm ml-1">(4.5)</span>
+                </div>
+                <div class="product-actions">
+                    <button class="btn-buy text-white">
+                        <i class="fas fa-bolt mr-1"></i> Details
+                    </button>
+                    <button class="btn-cart">
+                        <i class="fas fa-cart-plus mr-1"></i> Add
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product Card 2 - Pet Carrier -->
+        <div class="product-card">
+            <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGV0JTIwY2FycmllcnxlbnwwfHwwfHx8MA%3D%3D" 
+                 alt="Pet Carrier" class="product-image">
+            <div class="product-info">
+                <h3 class="product-title">Ventilated Pet Carrier</h3>
+                <p class="product-price">$89.00</p>
+                <div class="product-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <span class="text-gray-600 text-sm ml-1">(4.2)</span>
+                </div>
+                <div class="product-actions">
+                    <button class="btn-buy text-white">
+                        <i class="fas fa-bolt mr-1"></i> Details
+                    </button>
+                    <button class="btn-cart">
+                        <i class="fas fa-cart-plus mr-1"></i> Add
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Card 3 - Pet Grooming Kit -->
+        <div class="product-card">
+            <img src="https://images.unsplash.com/photo-1631511231050-24f8dba10537?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHByb2Zlc3Npb25hbCUyMCUyMGdyb29taW5nJTIwa2l0JTIwZm9yJTIwcGV0c3xlbnwwfHwwfHx8MA%3D%3D" 
+                 alt="Pet Grooming Kit" class="product-image">
+            <div class="product-info">
+                <h3 class="product-title">Professional Grooming Kit</h3>
+                <p class="product-price">$35.50</p>
+                <div class="product-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <span class="text-gray-600 text-sm ml-1">(4.8)</span>
+                </div>
+                <div class="product-actions">
+                    <button class="btn-buy text-white">
+                        <i class="fas fa-bolt mr-1"></i> Details
+                    </button>
+                    <button class="btn-cart">
+                        <i class="fas fa-cart-plus mr-1"></i> Add
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Card 4 - Pet Bed -->
+        <div class="product-card">
+            <img src="./products/product6.png" 
+                 alt="Orthopedic Pet Bed" 
+                 class="product-image" />
+            <div class="product-info">
+                <h3 class="product-title">Orthopedic Memory Foam Pet Bed</h3>
+                <p class="product-price">$79.99</p>
+                <div class="product-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                    <span class="text-gray-600 text-sm ml-1">(4.7)</span>
+                </div>
+                <div class="product-actions">
+                    <button class="btn-buy text-white">
+                        <i class="fas fa-bolt mr-1"></i> Details
+                    </button>
+                    <button class="btn-cart">
+                        <i class="fas fa-cart-plus mr-1"></i> Add
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product Card 5 - Pet Toys -->
+        <div class="product-card">
+            <img src="./products/product2.png" 
+                 alt="Pet Toys" class="product-image">
+            <div class="product-info">
+                <h3 class="product-title">Interactive Pet Toys Set</h3>
+                <p class="product-price">$24.99</p>
+                <div class="product-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <span class="text-gray-600 text-sm ml-1">(4.3)</span>
+                </div>
+                <div class="product-actions">
+                    <button class="btn-buy text-white">
+                        <i class="fas fa-bolt mr-1"></i> Details
+                    </button>
+                    <button class="btn-cart">
+                        <i class="fas fa-cart-plus mr-1"></i> Add
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product Card 6 - Pet Health Supplements -->
+        <div class="product-card">
+            <img src="./products/product10.png" 
+                 alt="Pet Supplements" class="product-image">
+            <div class="product-info">
+                <h3 class="product-title">Joint Health Supplements</h3>
+                <p class="product-price">$32.00</p>
+                <div class="product-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                    <span class="text-gray-600 text-sm ml-1">(4.6)</span>
+                </div>
+                <div class="product-actions">
+                    <button class="btn-buy text-white">
+                        <i class="fas fa-bolt mr-1"></i> Details
+                    </button>
+                    <button class="btn-cart">
+                        <i class="fas fa-cart-plus mr-1"></i> Add
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product Card 7 - Pet Dental Care -->
+        <div class="product-card">
+            <img src="./products/product1.jpg" 
+                 alt="Pet Dental Care" class="product-image">
+            <div class="product-info">
+                <h3 class="product-title">Dental Care Kit for Pets</h3>
+                <p class="product-price">$28.50</p>
+                <div class="product-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <span class="text-gray-600 text-sm ml-1">(4.4)</span>
+                </div>
+                <div class="product-actions">
+                    <button class="btn-buy text-white">
+                        <i class="fas fa-bolt mr-1"></i> Details
+                    </button>
+                    <button class="btn-cart">
+                        <i class="fas fa-cart-plus mr-1"></i> Add
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product Card 8 - Pet First Aid -->
+        <div class="product-card">
+            <img src="./products/product8.png" 
+                 alt="Pet First Aid Kit" class="product-image">
+            <div class="product-info">
+                <h3 class="product-title">Pet First Aid Kit</h3>
+                <p class="product-price">$45.00</p>
+                <div class="product-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <span class="text-gray-600 text-sm ml-1">(4.9)</span>
+                </div>
+                <div class="product-actions">
+                    <button class="btn-buy text-white">
+                        <i class="fas fa-bolt mr-1"></i> Details
+                    </button>
+                    <button class="btn-cart">
+                        <i class="fas fa-cart-plus mr-1"></i> Add
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Card 9 - Pet Training -->
+        <div class="product-card">
+            <img src="./products/product7.png" 
+                 alt="Pet Training" class="product-image">
+            <div class="product-info">
+                <h3 class="product-title">Nail Clipper for Pets</h3>
+                <p class="product-price">$19.99</p>
+                <div class="product-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <span class="text-gray-600 text-sm ml-1">(4.1)</span>
+                </div>
+                <div class="product-actions">
+                    <button class="btn-buy text-white">
+                        <i class="fas fa-bolt mr-1"></i> Details
+                    </button>
+                    <button class="btn-cart">
+                        <i class="fas fa-cart-plus mr-1"></i> Add
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Card 10 - Pet GPS Tracker -->
+        <div class="product-card">
+            <img src="./products/product3.png" 
+                 alt="Pet GPS Tracker" class="product-image">
+            <div class="product-info">
+                <h3 class="product-title">GPS Pet Tracker Collar</h3>
+                <p class="product-price">$129.00</p>
+                <div class="product-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                    <span class="text-gray-600 text-sm ml-1">(4.7)</span>
+                </div>
+                <div class="product-actions">
+                    <button class="btn-buy text-white">
+                        <i class="fas fa-bolt mr-1"></i> Details
+                    </button>
+                    <button class="btn-cart">
+                        <i class="fas fa-cart-plus mr-1"></i> Add
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Card 11 - Pet Shampoo -->
+        <div class="product-card">
+            <img src="./products/product5.jpg" 
+                 alt="Pet Shampoo" class="product-image">
+            <div class="product-info">
+                <h3 class="product-title">Organic Pet Shampoo</h3>
+                <p class="product-price">$18.50</p>
+                <div class="product-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <span class="text-gray-600 text-sm ml-1">(4.2)</span>
+                </div>
+                <div class="product-actions">
+                    <button class="btn-buy text-white">
+                        <i class="fas fa-bolt mr-1"></i> Details
+                    </button>
+                    <button class="btn-cart">
+                        <i class="fas fa-cart-plus mr-1"></i> Add
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Card 12 - Pet Feeding -->
+        <div class="product-card">
+            <img src="./products/product9.png" 
+                 alt="Pet Feeding" class="product-image">
+            <div class="product-info">
+                <h3 class="product-title">Air Tag Cooler for Pets</h3>
+                <p class="product-price">$65.00</p>
+                <div class="product-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <span class="text-gray-600 text-sm ml-1">(4.3)</span>
+                </div>
+                <div class="product-actions">
+                    <button class="btn-buy text-white">
+                        <i class="fas fa-bolt mr-1"></i> Details
+                    </button>
+                    <button class="btn-cart">
+                        <i class="fas fa-cart-plus mr-1"></i> Add
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Load More Button -->
+    <div class="flex justify-center mt-8">
+        <button class="btn-buy text-white py-3 px-6 rounded-lg font-medium">
+            Load More Products
+        </button>
+    </div>
+</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white p-8 mt-auto">
+        <div class="container mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
+            <!-- Column 1: Brand Info -->
+            <div>
+                <h3 class="text-xl font-bold mb-4">V-Markeplace</h3>
+                <p class="text-gray-400 text-sm">Quality products delivered right to your door.</p>
+                <div class="flex space-x-4 mt-4">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            
+            <!-- Column 2: Quick Links -->
+            <div>
+                <h3 class="text-lg font-semibold mb-4 border-b border-gray-700 pb-1">Quick Links</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="./index.html" class="text-gray-400 hover:text-white transition-colors">Home</a></li>
+                    <li><a href="./contact-us.html" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- Column 3: Customer Service -->
+            <div>
+                <h3 class="text-lg font-semibold mb-4 border-b border-gray-700 pb-1">Customer Service</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Track Order</a></li>
+                    <li><a href="./contact-us.html" class="text-gray-400 hover:text-white transition-colors">Help Center</a></li>
+                </ul>
+            </div>
+
+            <!-- Column 4: Policies -->
+            <div>
+                <h3 class="text-lg font-semibold mb-4 border-b border-gray-700 pb-1">Policies</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="./privacy-policy.html" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
+                    <li><a href="./terms-conditions.html" class="text-gray-400 hover:text-white transition-colors">Terms of Use</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="container mx-auto mt-8 pt-4 border-t border-gray-700 text-center text-sm text-gray-400">
+            &copy; 2025 V-Verse All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Product data
+        const products = [
+            {
+                id: 1,
+                title: "Premium Dry Dog Food",
+                price: 45.99,
+                image: "https://images.unsplash.com/photo-1589924691995-400dc9ecc119?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGV0JTIwZm9vZHxlbnwwfHwwfHx8MA%3D%3D",
+                category: "food",
+                brand: "premium",
+                rating: 4.5,
+                seller: "verified"
+            },
+            {
+                id: 2,
+                title: "Ventilated Pet Carrier",
+                price: 89.00,
+                image: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGV0JTIwY2FycmllcnxlbnwwfHwwfHx8MA%3D%3D",
+                category: "accessories",
+                brand: "natural",
+                rating: 4.2,
+                seller: "premium"
+            },
+            {
+                id: 3,
+                title: "Professional Grooming Kit",
+                price: 35.50,
+                image: "https://images.unsplash.com/photo-1631511231050-24f8dba10537?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHByb2Zlc3Npb25hbCUyMCUyMGdyb29taW5nJTIwa2l0JTIwZm9yJTIwcGV0c3xlbnwwfHwwfHx8MA%3D%3D",
+                category: "health",
+                brand: "veterinary",
+                rating: 4.8,
+                seller: "verified"
+            },
+            {
+                id: 4,
+                title: "Orthopedic Memory Foam Pet Bed",
+                price: 79.99,
+                image: "https://images.unsplash.com/photo-1583337130411-7c7b5e9f1b6f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGV0JTIwYmVkfGVufDB8fDB8fHww",
+                category: "accessories",
+                brand: "premium",
+                rating: 4.7,
+                seller: "premium"
+            },
+            {
+                id: 5,
+                title: "Interactive Pet Toys Set",
+                price: 24.99,
+                image: "https://images.unsplash.com/photo-1559136558-0d47b77f9d3a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGV0JTIwdG95c3xlbnwwfHwwfHx8MA%3D%3D",
+                category: "toys",
+                brand: "paws",
+                rating: 4.3,
+                seller: "verified"
+            },
+            {
+                id: 6,
+                title: "Joint Health Supplements",
+                price: 32.00,
+                image: "https://images.unsplash.com/photo-1597481499750-3e11b3e3d3a3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGV0JTIwc3VwcGxlbWVudHN8ZW58MHx8MHx8fDA%3D",
+                category: "health",
+                brand: "veterinary",
+                rating: 4.6,
+                seller: "premium"
+            },
+            {
+                id: 7,
+                title: "Dental Care Kit for Pets",
+                price: 28.50,
+                image: "https://images.unsplash.com/photo-1597481499750-3e11b3e3d3a3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGV0JTIwZGVudGFsfGVufDB8fDB8fHww",
+                category: "health",
+                brand: "veterinary",
+                rating: 4.4,
+                seller: "verified"
+            },
+            {
+                id: 8,
+                title: "Pet First Aid Kit",
+                price: 45.00,
+                image: "https://images.unsplash.com/photo-1597481499750-3e11b3e3d3a3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGV0JTIwZmlyc3QlMjBhaWR8ZW58MHx8MHx8fDA%3D",
+                category: "health",
+                brand: "veterinary",
+                rating: 4.9,
+                seller: "premium"
+            }
+        ];
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Render products
+            renderProducts(products);
+            
+            // Set up category tabs
+            setupCategoryTabs();
+            
+            // Set up filter functionality
+            setupFilters();
+            
+            // Set up slider
+            setupSlider();
+        });
+
+        // Render products to the grid
+        function renderProducts(productsToRender) {
+            const productGrid = document.getElementById('product-grid');
+            productGrid.innerHTML = '';
+            
+            productsToRender.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                
+                // Generate star rating HTML
+                let starsHtml = '';
+                const fullStars = Math.floor(product.rating);
+                const hasHalfStar = product.rating % 1 >= 0.5;
+                
+                for (let i = 0; i < 5; i++) {
+                    if (i < fullStars) {
+                        starsHtml += '<i class="fas fa-star"></i>';
+                    } else if (i === fullStars && hasHalfStar) {
+                        starsHtml += '<i class="fas fa-star-half-alt"></i>';
+                    } else {
+                        starsHtml += '<i class="far fa-star"></i>';
+                    }
+                }
+                
+                productCard.innerHTML = `
+                    <img src="${product.image}" alt="${product.title}" class="product-image">
+                    <div class="product-info">
+                        <h3 class="product-title">${product.title}</h3>
+                        <p class="product-price">$${product.price.toFixed(2)}</p>
+                        <div class="product-rating">
+                            ${starsHtml}
+                            <span class="text-gray-600 text-sm ml-1">(${product.rating})</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn-buy text-white">
+                                <i class="fas fa-bolt mr-1"></i> Details
+                            </button>
+                            <button class="btn-cart">
+                                <i class="fas fa-cart-plus mr-1"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                productGrid.appendChild(productCard);
+            });
+            
+            // Add event listeners to the new buttons
+            document.querySelectorAll('.btn-buy').forEach(button => {
+                button.addEventListener('click', () => {
+                    window.location.href = './product-details.html';
+                });
+            });
+        }
+
+        // Set up category tabs
+        function setupCategoryTabs() {
+            const tabs = document.querySelectorAll('.category-tab');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // In a real app, you would fetch different products based on category
+                    // For this demo, we'll just show a message
+                    const category = this.getAttribute('data-category');
+                    console.log(`Switched to ${category} category`);
+                });
+            });
+        }
+
+        // Set up filter functionality
+        function setupFilters() {
+            const priceSlider = document.getElementById('price-slider');
+            const minPriceInput = document.getElementById('min-price');
+            const maxPriceInput = document.getElementById('max-price');
+            const clearFiltersBtn = document.querySelector('.clear-filters');
+            
+            // Update max price input when slider changes
+            priceSlider.addEventListener('input', function() {
+                maxPriceInput.value = this.value;
+                filterProducts();
+            });
+            
+            // Update slider when max price input changes
+            maxPriceInput.addEventListener('input', function() {
+                priceSlider.value = this.value;
+                filterProducts();
+            });
+            
+            // Update min price input
+            minPriceInput.addEventListener('input', filterProducts);
+            
+            // Add event listeners to all filter checkboxes
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', filterProducts);
+            });
+            
+            // Clear all filters
+            clearFiltersBtn.addEventListener('click', function() {
+                // Reset price inputs
+                minPriceInput.value = 0;
+                maxPriceInput.value = 200;
+                priceSlider.value = 200;
+                
+                // Check all checkboxes
+                document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = true;
+                });
+                
+                // Re-render all products
+                renderProducts(products);
+            });
+        }
+
+        // Filter products based on selected filters
+        function filterProducts() {
+            const minPrice = parseFloat(document.getElementById('min-price').value) || 0;
+            const maxPrice = parseFloat(document.getElementById('max-price').value) || 200;
+            
+            // Get selected categories
+            const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked'))
+                .map(checkbox => checkbox.value);
+            
+            // Get selected brands
+            const selectedBrands = Array.from(document.querySelectorAll('input[name="brand"]:checked'))
+                .map(checkbox => checkbox.value);
+            
+            // Get selected ratings
+            const selectedRatings = Array.from(document.querySelectorAll('input[name="rating"]:checked'))
+                .map(checkbox => parseFloat(checkbox.value));
+            
+            // Get selected sellers
+            const selectedSellers = Array.from(document.querySelectorAll('input[name="seller"]:checked'))
+                .map(checkbox => checkbox.value);
+            
+            // Filter products
+            const filteredProducts = products.filter(product => {
+                // Price filter
+                if (product.price < minPrice || product.price > maxPrice) return false;
+                
+                // Category filter
+                if (selectedCategories.length > 0 && !selectedCategories.includes(product.category)) return false;
+                
+                // Brand filter
+                if (selectedBrands.length > 0 && !selectedBrands.includes(product.brand)) return false;
+                
+                // Rating filter
+                if (selectedRatings.length > 0) {
+                    const meetsRating = selectedRatings.some(rating => product.rating >= rating);
+                    if (!meetsRating) return false;
+                }
+                
+                // Seller filter
+                if (selectedSellers.length > 0 && !selectedSellers.includes(product.seller)) return false;
+                
+                return true;
+            });
+            
+            // Render filtered products
+            renderProducts(filteredProducts);
+        }
+
+        // Set up hero slider
+        function setupSlider() {
+            const sliderWrapper = document.getElementById('slider-wrapper');
+            const indicatorsContainer = document.getElementById('slider-indicators');
+            const slides = document.querySelectorAll('.slide');
+            const totalSlides = slides.length;
+            let currentIndex = 0;
+            let slideInterval;
+            const slideDuration = 4000; // 4 seconds
+
+            function updateSlider() {
+                // Move the slider wrapper to the current slide
+                const offset = -currentIndex * (100 / totalSlides);
+                sliderWrapper.style.transform = `translateX(${offset}%)`;
+
+                // Update indicators
+                document.querySelectorAll('.indicator').forEach((indicator, index) => {
+                    indicator.classList.toggle('active', index === currentIndex);
+                });
+            }
+
+            function goToSlide(index) {
+                currentIndex = index;
+                updateSlider();
+                resetInterval();
+            }
+            
+            // Function to advance the slide automatically
+            function nextSlide() {
+                currentIndex = (currentIndex + 1) % totalSlides;
+                updateSlider();
+            }
+
+            // Click handler for indicators
+            indicatorsContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('indicator')) {
+                    const index = parseInt(e.target.dataset.slideIndex);
+                    goToSlide(index);
+                }
+            });
+            
+            // Start and reset the auto-slide interval
+            function startInterval() {
+                slideInterval = setInterval(nextSlide, slideDuration);
+            }
+
+            function resetInterval() {
+                clearInterval(slideInterval);
+                startInterval();
+            }
+            
+            // Initial load and start interval
+            updateSlider();
+            startInterval();
+
+            // Pause on hover
+            const sliderContainer = document.getElementById('hero-slider');
+            sliderContainer.addEventListener('mouseenter', () => clearInterval(slideInterval));
+            sliderContainer.addEventListener('mouseleave', () => startInterval());
+        }
+    </script>
+</body>
+</html>

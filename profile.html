@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | V-Verse</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        #profileAvatar{
+            border: 0.5px  solid rgb(207, 225, 231);
+        }
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            min-height: 98vh;
+            padding: 20px;
+        }
+        
+        .profile-view-container {
+            max-width: 1000px;
+            margin: 30px auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        .profile-header {
+            background: linear-gradient(135deg, #016DEA, #E31937);
+            color: white;
+            padding: 25px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .header-text h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .header-text p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .profile-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 0;
+        }
+        
+        .profile-sidebar {
+            background: white;
+            padding: 30px;
+            text-align: center;
+            border-right: 1px solid #f0f2f5;
+        }
+        
+        .profile-avatar {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #f0f2f5;
+            margin: 0 auto 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .profile-name {
+            font-size: 22px;
+            margin: 0 0 5px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .profile-title {
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+        
+        .edit-profile-btn {
+            background: linear-gradient(135deg, #016DEA, #E31937);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(1, 109, 234, 0.3);
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 1rem;
+        }
+        
+        .edit-profile-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(1, 109, 234, 0.4);
+        }
+        
+        .profile-details {
+            padding: 30px;
+            background: white;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .section-title i {
+            background: linear-gradient(135deg, #016DEA, #E31937);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .detail-label {
+            font-weight: 500;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .detail-label i {
+            background: linear-gradient(135deg, #016DEA, #E31937);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .detail-value {
+            color: #333;
+            padding: 8px 0;
+        }
+        
+        .v-logo i {
+            font-size: 36px;
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .profile-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-sidebar {
+                border-right: none;
+                border-bottom: 1px solid #f0f2f5;
+            }
+            
+            .detail-grid {
+                grid-template-columns: 1fr;
+                gap: 5px;
+            }
+            
+            .profile-header {
+                padding: 20px;
+            }
+            
+            .profile-sidebar, .profile-details {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-view-container">
+        <div class="profile-header">
+            <div class="header-content">
+                <div class="header-text">
+                    <h1>My Profile</h1>
+                    <p>View your personal and professional information</p>
+                </div>
+            </div>
+            <div class="v-logo">
+                <i class="fas fa-paw"></i>
+            </div>
+        </div>
+        
+        <div class="profile-content">
+            <div class="profile-sidebar">
+                <img id="profileAvatar" src="" alt="Profile Picture" class="profile-avatar">
+                <h2 id="profileName" class="profile-name"></h2>
+                <p id="profileTitle" class="profile-title"></p>
+                <a href="edit-profile.html" class="edit-profile-btn">
+                    <i class="fas fa-edit"></i> Edit Profile
+                </a>
+                <a href="./index.html" class="edit-profile-btn">
+                    <i class="fas fa-home"></i> Back To home
+                </a>
+            </div>
+            
+            <div class="profile-details">
+                <h3 class="section-title"><i class="fas fa-info-circle"></i> Basic Information</h3>
+                
+                <div class="detail-grid">
+                    <span class="detail-label"><i class="fas fa-envelope"></i> Email:</span>
+                    <span id="profileEmail" class="detail-value"></span>
+                </div>
+                
+                <div class="detail-grid">
+                    <span class="detail-label"><i class="fas fa-phone"></i> Phone:</span>
+                    <span id="profilePhone" class="detail-value"></span>
+                </div>
+                
+                <div class="detail-grid">
+                    <span class="detail-label"><i class="fas fa-globe"></i> Country:</span>
+                    <span id="profileCountry" class="detail-value"></span>
+                </div>
+                
+                <div class="detail-grid">
+                    <span class="detail-label"><i class="fas fa-city"></i> City:</span>
+                    <span id="profileCity" class="detail-value"></span>
+                </div>
+                
+                <div class="detail-grid">
+                    <span class="detail-label"><i class="fas fa-map-marker-alt"></i> Address:</span>
+                    <span id="profileAddress" class="detail-value"></span>
+                </div>
+                
+                <h3 class="section-title" style="margin-top: 30px;"><i class="fas fa-graduation-cap"></i> Professional Information</h3>
+                
+                <div class="detail-grid">
+                    <span class="detail-label"><i class="fas fa-stethoscope"></i> Specialization:</span>
+                    <span id="profileSpecialization" class="detail-value"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+    // Function to fetch and display user profile data
+    async function loadProfileData() {
+        try {
+            const response = await fetch('./backend/index/profile.php?action=get');
+    
+            const userData = await response.json();
+            // const userData = await response.text();
+            // alert(userData); 
+    
+            // Populate the profile data
+            document.getElementById('profileName').textContent = userData.name || 'Not specified';
+            document.getElementById('profileTitle').textContent = userData.specialization || 'Veterinary Professional';
+            document.getElementById('profileEmail').textContent = userData.email || 'Not specified';
+            document.getElementById('profilePhone').textContent = userData.phone || 'Not specified';
+            document.getElementById('profileCountry').textContent = userData.country || 'Not specified';
+            document.getElementById('profileCity').textContent = userData.city || 'Not specified';
+            document.getElementById('profileAddress').textContent = userData.address || 'Not specified';
+            document.getElementById('profileSpecialization').textContent = userData.specialization || 'Not specified';
+            
+            // Set profile image
+            const avatarImg = document.getElementById('profileAvatar');
+            avatarImg.src = userData.profile_image || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80';
+            
+        } catch (error) {
+            console.error('Error loading profile:', error);
+            alert('Error loading profile data. Please try again.');
+        }
+    }
+    
+    // Load profile data when page loads
+    document.addEventListener('DOMContentLoaded', loadProfileData);
+    </script>
+</body>
+</html>
