@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - V-Verse</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Global Resets and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif; /* Using Inter for a modern look */
+        }
+
+        body {
+            /* background: linear-gradient(135deg, #FFC0CB 0%, #ADD8E6 100%);  */
+            background-image: url("https://st4.depositphotos.com/1700950/40372/i/450/depositphotos_403723946-stock-photo-smiling-male-business-consultant-headphones.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            /* Light pink to light blue background */
+            /* background: linear-gradient(135deg, blue 0%, red 100%); Light pink to light blue background */
+            color: #334155; /* Darker text for better readability */
+            min-height: 100vh;
+            display: flex; /* Use flexbox for easy centering */
+            align-items: center; /* Center vertically */
+            justify-content: center; /* Center horizontally */
+            padding: 2rem;
+        }
+
+        /* Container for the entire form */
+        .container {
+            max-width: 900px; /* Increased max-width to accommodate two columns */
+            width: 100%; /* Ensure it takes full width on smaller screens */
+            background: #ffffff;
+            border-radius: 20px; /* More rounded corners */
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15); /* Stronger, softer shadow */
+            display: flex; /* Changed to flex for the side-by-side layout */
+            flex-direction: row; /* Layout content side by side */
+            /* Removed padding here, moved to inner sections */
+            background: transparent;
+            opacity: 0.8;
+        }
+
+        /* Left Section: Image/Info */
+        .contact-left-section {
+            flex: 1; /* Takes up equal space */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2.5rem;
+            /* background: linear-gradient(150deg, blue 0%, red 100%); Red gradient for left section */
+            color: white;
+            text-align: center;
+        }
+
+        .contact-left-section h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .image-placeholder {
+            width: 300px; /* Circle size */
+            height: 300px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white circle */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+            border: 3px solid rgba(255, 255, 255, 0.5); /* Border for the circle */
+            overflow: hidden; /* For actual image if loaded */
+        }
+
+        .image-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+
+        /* Contact Form Section */
+        .contact-form {
+            flex: 1; /* Takes up equal space */
+            padding: 2.5rem; /* Consistent padding */
+            background-color: #f9fafb; /* Light background for the form area */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Vertically center form content within its section */
+.container{
+
+    opacity: 1;
+}
+        }
+
+        /* Removed header, as "Contact us" is now on the left section */
+        /* Header { ... } */
+
+        .form-row {
+            display: flex; /* Keep flex for labels and inputs side-by-side */
+            align-items: center; /* Align label and input vertically */
+            gap: 1.5rem; /* Gap between label and input */
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row label {
+            flex-shrink: 0; /* Prevent label from shrinking */
+            width: 100px; /* Fixed width for labels */
+            font-weight: 600;
+            color: #334155;
+            font-size: 1rem;
+        }
+
+        .form-group {
+            flex: 1; /* Allow input to take remaining space */
+            position: relative;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem; /* Slightly reduced padding */
+            border: 1px solid #cbd5e1; /* Lighter border */
+            border-radius: 8px; /* Slightly less rounded inputs to match sketch */
+            font-size: 0.95rem; /* Slightly smaller font for inputs */
+            transition: all 0.3s ease; /* Smoother transition */
+            background-color: #fefefe; /* Very light background for inputs */
+            color: #334155;
+        }
+
+        .form-control:focus {
+            border-color: #0000FF; /* Blue focus color */
+            outline: none;
+            background-color: white;
+            box-shadow: 0 0 0 4px rgba(0, 0, 255, 0.15); /* Subtle blue glow on focus */
+        }
+
+        textarea.form-control {
+            min-height: 120px; /* Adjusted min-height */
+            resize: vertical;
+            padding-top: 1rem; /* Adjusted padding for textarea */
+        }
+
+        /* Select dropdown styling (if needed, but removed for this sketch) */
+        /* select.form-control { ... } */
+
+        /* Submit Button */
+        .submit-btn {
+            background: linear-gradient(135deg, #0000FF 0%, #00008B 100%); /* Blue gradient for button */
+            color: white;
+            border: none;
+            padding: 1rem 2rem; /* Adjusted padding */
+            font-size: 1rem; /* Adjusted font size */
+            font-weight: 700; /* Bolder text */
+            border-radius: 8px; /* Matches input rounded corners */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%; /* Full width */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.7rem;
+            margin-top: 2rem; /* More space above button */
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            box-shadow: 0 6px 20px rgba(0, 0, 255, 0.4); /* Blue shadow */
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 255, 0.5);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 15px rgba(0, 0, 255, 0.3);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column; /* Stack sections vertically on small screens */
+                border-radius: 16px;
+            }
+
+            .contact-left-section {
+                padding: 2rem;
+                order: -1; /* Place left section on top on mobile */
+            }
+            .contact-left-section h2 {
+                margin-bottom: 1.5rem;
+            }
+            .image-placeholder {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .contact-form {
+                padding: 2rem;
+            }
+            
+            .form-row {
+                flex-direction: column; /* Stack label and input vertically on mobile */
+                gap: 0.5rem;
+                align-items: flex-start; /* Align labels to start */
+            }
+            .form-row label {
+                width: auto; /* Remove fixed width for labels on mobile */
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .contact-left-section h2 {
+                font-size: 2rem;
+            }
+            
+            .image-placeholder {
+                width: 120px;
+                height: 120px;
+                font-size: 1.2rem;
+            }
+            
+            .contact-form {
+                padding: 1.5rem;
+            }
+            
+            .submit-btn {
+                padding: 0.9rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Toast Notification Styles */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .toast {
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            color: white;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateX(150%);
+            transition: transform 0.3s ease-in-out;
+            max-width: 350px;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            background-color: #4CAF50;
+            border-left: 5px solid #388E3C;
+        }
+
+        .toast.error {
+            background-color: #F44336;
+            border-left: 5px solid #D32F2F;
+        }
+
+        .toast-icon {
+            margin-right: 12px;
+            font-size: 20px;
+        }
+
+        .toast-message {
+            flex: 1;
+        }
+
+        .toast-close {
+            margin-left: 10px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .toast-close:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+
+        <div class="contact-form">
+            <form id="contactForm" action="submit_contact.php" method="POST">
+                <div class="form-row">
+                    <label for="name">Name</label>
+                    <div class="form-group">
+                        <input type="text" id="name" name="name" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <label for="phone">Number</label>
+                    <div class="form-group">
+                        <input type="tel" id="phone" name="phone" class="form-control">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label for="email">Email</label>
+                    <div class="form-group">
+                        <input type="email" id="email" name="email" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <label for="message">Message</label>
+                    <div class="form-group">
+                        <textarea id="message" name="message" class="form-control" required rows="6"></textarea>
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    Send Message
+                </button>
+            </form>
+        </div>
+        <div class="contact-left-section">
+            <h2>Contact Us</h2>
+            <div class="image-placeholder">
+                <img src="https://st2.depositphotos.com/3928745/6221/i/450/depositphotos_62213505-stock-photo-hand-of-businessman-and-social.jpg" alt="Image">
+                <!-- <img src="https://st.depositphotos.com/1570716/4101/i/450/depositphotos_41018917-stock-photo-businessman-push-to-contact-us.jpg" alt="Image"> -->
+            </div>
+        </div>
+    </div>
+    <div class="toast-container" id="toast-container"></div>
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Simple form validation
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim(); // 'Number' field
+            const message = document.getElementById('message').value.trim();
+            
+            if (!name || !email || !message) { // Phone is optional
+                showToast('Please fill in all required fields (Name, Email, Message)', 'error');
+                return;
+            }
+            
+            try {
+                // Create FormData object
+                const formData = new FormData();
+                formData.append('name', name);
+                formData.append('email', email);
+                formData.append('phone', phone);
+                formData.append('message', message);
+                // Note: 'subject' field removed as per sketch
+                
+                const response = await fetch("./backend/index/contact-submission.php", {
+                    method: "POST",
+                    body: formData // FormData automatically sets the correct Content-Type
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showToast(data.message, 'success');
+                    this.reset(); // Resets the form fields
+                } else {
+                    showToast('Error: ' + data.message, 'error');
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('An error occurred while submitting the form. Please try again.', 'error');
+            }
+        });
+
+        // Toast notification function
+        function showToast(message, type = 'success') {
+            const toastContainer = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const icons = {
+                success: 'fas fa-check-circle',
+                error: 'fas fa-exclamation-circle'
+            };
+            
+            toast.innerHTML = `
+                <i class="toast-icon ${icons[type]}"></i>
+                <div class="toast-message">${message}</div>
+                <span class="toast-close">&times;</span>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            setTimeout(() => toast.classList.add('show'), 10);
+            
+            const autoRemove = setTimeout(() => {
+                toast.classList.remove('show');
+                window.location.href="./index.html";
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+            
+            toast.querySelector('.toast-close').addEventListener('click', () => {
+                clearTimeout(autoRemove);
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            });
+        }
+    </script>
+</body>
+</html>
